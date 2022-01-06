@@ -27,6 +27,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MethodChangeMiddleware } from './helpers/middlewares/method-change/method-change.middleware';
 import { ModelBootstrapModule } from './databases/model-bootstrap/model-bootstrap.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { FaqsModule } from './faqs/faqs.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
       delimiter: '.',
     }),
     DashboardModule,
+    FaqsModule,
   ],
   controllers: [AppController],
   providers: [
