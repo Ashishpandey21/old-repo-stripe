@@ -5,10 +5,7 @@ import { Controller, Get, Render } from '@nestjs/common';
   path: 'dashboard',
 })
 export class DashboardController {
-
   @Get()
   @Render('dashboard')
-  public dashboard(){
-
-  }
+  public dashboard() {}
 }

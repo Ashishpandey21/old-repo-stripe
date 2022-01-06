@@ -15,6 +15,8 @@ import { GenerateClientService } from './commands/oauth/generate-client/generate
 import { ClientRepoService } from '../auth/services/oauth/client-repo/client-repo.service';
 import { ModelBootstrapModule } from '../databases/model-bootstrap/model-bootstrap.module';
 import { SeederService } from './commands/seeder/seeder.service';
+import { FaqSeederService } from './seeders/faq-seeder/faq-seeder.service';
+import { FaqRepoService } from '../faqs/services/faq-repo/faq-repo.service';
 
 @Module({
   imports: [CommandModule, EnvironmentModule, ModelBootstrapModule],
@@ -33,6 +35,8 @@ import { SeederService } from './commands/seeder/seeder.service';
     GenerateClientService,
     ClientRepoService,
     SeederService,
+    FaqSeederService,
+    FaqRepoService,
   ],
 })
 export class CliCommandsModule {}

@@ -16,6 +16,10 @@ module.exports = {
         type: DataType.TEXT,
         allowNull: false,
       },
+      order: {
+        type: DataType.INTEGER,
+        allowNull: false,
+      },
       answer: {
         type: DataType.TEXT,
         allowNull: false,
