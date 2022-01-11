@@ -28,9 +28,11 @@ import { MethodChangeMiddleware } from './helpers/middlewares/method-change/meth
 import { ModelBootstrapModule } from './databases/model-bootstrap/model-bootstrap.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FaqsModule } from './faqs/faqs.module';
+import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
 
 @Module({
   imports: [
+    PaymentGatewayModule.forRoot(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27'}),
     PassportModule.register({
       session: true,
     }),
