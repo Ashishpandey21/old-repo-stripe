@@ -1,56 +1,20 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { StripeRepoService } from '../../services/stripe-repo/stripe-repo.service';
 
+@ApiTags('Stripe Payment Management')
 @Controller({
   version: ['1'],
-  path: 'payment_intents'
 })
 export class StripePaymentGatewayController {
-
-
-  @Post()
-  public postIntent(): any{
-    // @ToDO it will  create new intent
-  }
-
-  @Post(':intentId')
-  public createIntentCorrespondToIntentId(): any{
-
-  }
-  @Post(':intentId/confirm')
-  public confirmIntentCorrespondToIntentId(): any{
-
-  }
-
-  @Post(':intentId/cancel')
-  public cancelIntentCorrespondToIntentId(): any{
-
-  }
-
-  @Post(':intentId/capture')
-  public captureIntentCorrespondToIntentId(): any{
-
-  }
-
-
+  constructor(private stripeRepoService: StripeRepoService) {}
 
   /**
-   * It will fetch particular payment detail
+   * It will return after payment created
    */
-  @Get(':intentId')
-  public fetchStripePayment(
-    @Param('intentId') intentId: number
-  ): any{
-    //TODO fetch payment correspond to intent id
-
-  }
-
-  /**
-   * It will fetch payment detail
-   */
-  @Get()
-  public fetchAllStripePayment(
-  ): any{
-    //TODO fetch payment correspond to intent id
-
+  @ApiProperty()
+  @Post('pay')
+  public async pay(){
+    return this.stripeRepoService.pay();
   }
 }
