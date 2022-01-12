@@ -15,7 +15,7 @@ export class PaymentGatewayModule {
     const stripeProvider: Provider = {
       provide: STRIPE_CLIENT,
       useValue: stripe,
-    }
+    };
     return {
       module: PaymentGatewayModule,
       providers: [stripeProvider],

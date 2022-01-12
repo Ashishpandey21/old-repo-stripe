@@ -9,7 +9,9 @@ describe('StripePaymentGatewayController', () => {
       controllers: [StripePaymentGatewayController],
     }).compile();
 
-    controller = module.get<StripePaymentGatewayController>(StripePaymentGatewayController);
+    controller = module.get<StripePaymentGatewayController>(
+      StripePaymentGatewayController,
+    );
   });
 
   it('should be defined', () => {

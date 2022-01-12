@@ -17,7 +17,7 @@ export class StripeRepoService {
         payment_method_types: [CARD],
       });
       const confirm = await this.confirmPayment(intent);
-      return confirm['stripe_js']
+      return confirm['stripe_js'];
     } catch (e) {
       if (e.type === 'StripeCardError') {
         // Display error on client
@@ -35,7 +35,7 @@ export class StripeRepoService {
    * @param intent
    */
 
-  public async confirmPayment(intent: any){
+  public async confirmPayment(intent: any) {
     const confirm = await this.stripe.paymentIntents.confirm(intent.id, {
       payment_method: 'pm_card_visa',
       receipt_email: 'harry.ashish@rubicotech.in',

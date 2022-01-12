@@ -11,7 +11,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('currencies',{
+    await queryInterface.createTable('currencies', {
       id: {
         type: DataType.BIGINT,
         primaryKey: true,
@@ -46,15 +46,17 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP()'),
       },
-    })
+    });
   },
 
-  down: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     /**
      * Add reverting commands here.
      *
      * Example:
      * await queryInterface.dropTable('users');
      */
-  }
+
+    await queryInterface.dropTable('currencies');
+  },
 };

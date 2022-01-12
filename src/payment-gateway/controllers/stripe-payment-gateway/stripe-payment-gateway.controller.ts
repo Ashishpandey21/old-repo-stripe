@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { StripeRepoService } from '../../services/stripe-repo/stripe-repo.service';
 
@@ -14,7 +14,7 @@ export class StripePaymentGatewayController {
    */
   @ApiProperty()
   @Post('pay')
-  public async pay(){
+  public async pay() {
     return this.stripeRepoService.pay();
   }
 }
