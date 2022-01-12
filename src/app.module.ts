@@ -32,7 +32,9 @@ import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
 
 @Module({
   imports: [
-    PaymentGatewayModule.forRoot(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27'}),
+    PaymentGatewayModule.forRoot(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2020-08-27',
+    }),
     PassportModule.register({
       session: true,
     }),
