@@ -5,6 +5,10 @@ class PaymentElement {
     this.secretKey = null;
   }
 
+  get card() {
+    return this.elements._elements[0];
+  }
+
   mount() {
     for (const elementName of ['cardNumber', 'cardCvc', 'cardExpiry']) {
       const el = this.elements.create(elementName);
@@ -29,14 +33,34 @@ class PaymentElement {
   }
 }
 
-const paymentForm = (stripePublishableKey) => ({
-  stripeElement: new PaymentElement(Stripe(stripePublishableKey)),
-
-  fetchingPaymentIntent: true,
+const initialState = () => ({
+  currency: 'usd',
+  donationType: 'oneTime',
+  donationAmount: '25',
 
   currency: 'usd',
   donationType: 'oneTime',
-  donationAmount: null,
+  donationAmount: '25',
+
+  salutation: 'Mr.',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  company: '',
+  country: '',
+  city: '',
+  state: '',
+  zipPostalCode: '',
+  address1: '',
+  address2: '',
+});
+
+const paymentForm = (stripePublishableKey) => ({
+  stripeElement: null,
+  fetchingPaymentIntent: true,
+
+  ...initialState(),
 
   currencies: {
     usd: '$',
@@ -49,6 +73,10 @@ const paymentForm = (stripePublishableKey) => ({
     jpy: '¥',
     brl: '$',
     cad: '$',
+  },
+
+  get fullName() {
+    return `${this.salutation} ${this.firstName} ${this.lastName}`;
   },
 
   get processingFees() {
@@ -77,64 +105,114 @@ const paymentForm = (stripePublishableKey) => ({
   },
 
   init() {
-    console.info('-- component init');
-
     this.fetchingPaymentIntent = false;
-    this.stripeElement.mount();
+    this.stripeElement = new PaymentElement(Stripe(stripePublishableKey));
+
+    const mountPaymentElement = async () => {
+      const clientSecret = await this.createPaymentIntent();
+      this.stripeElement.updateSecretKey(clientSecret);
+      this.fetchingPaymentIntent = false;
+    };
 
     /**
      * Prevent click bombing.
-     * Wait for 2 seconds before creating a payment intent.
+     * Wait for ${waitFor} seconds before creating a payment intent.
      * If user changes the payment intent props within those 2 seconds,
      * cancel the old request and create a new one.
      */
-    const waitFor = 2 * 1000;
+    const waitFor = 1 * 1000;
     let requestTimeoutId = null;
+
     const queueCreatePaymentIntentRequest = () => {
       this.fetchingPaymentIntent = true;
-
       if (!!requestTimeoutId) clearTimeout(requestTimeoutId);
-
-      requestTimeoutId = setTimeout(async () => {
-        const clientSecret = await this.createPaymentIntent();
-        this.stripeElement.updateSecretKey(clientSecret);
-        this.fetchingPaymentIntent = false;
-      }, waitFor);
+      requestTimeoutId = setTimeout(mountPaymentElement, waitFor);
     };
 
     ['currency', 'donationType', 'donationAmount'].forEach((prop) =>
       this.$watch(prop, queueCreatePaymentIntentRequest),
     );
+
+    mountPaymentElement();
+
+    console.info('paymentForm -- instantiated');
+  },
+
+  validateForm() {
+    // FIXME: validate data
+  },
+
+  resetForm() {
+    // FIXME: reset form
   },
 
   async submit() {
-    console.info('-- capturing the payment');
+    this.$refs.submitButton.disabled = true;
+    await this.capturePayment();
+    this.$refs.submitButton.disabled = false;
+  },
 
-    const { submitButton } = this.$refs;
-    const { stripe, secretKey } = this.stripeElement;
-
-    submitButton.disabled = true;
-
-    const { error } = await stripe.confirmCardPayment(secretKey, {
+  async capturePayment() {
+    const payload = {
       payment_method: {
-        card: this.stripeElement.elements,
+        card: this.stripeElement.card,
+        billing_details: {
+          address: {
+            city: this.city,
+            country: this.country,
+            line1: this.address1,
+            line2: this.address2,
+            postal_code: this.zipPostalCode,
+            state: this.state,
+          },
+          email: this.email,
+          name: this.fullName,
+          phone: this.phoneNumber,
+        },
       },
-    });
+    };
+
+    const { stripe, secretKey } = this.stripeElement;
+    const { paymentIntent, error } = await stripe.confirmCardPayment(
+      secretKey,
+      payload,
+    );
+
+    if (paymentIntent && paymentIntent.status === 'succeeded') {
+      console.info(`paymentForm -- payment successfull`);
+      this.resetForm();
+      new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
+    }
 
     if (error) {
-      console.log(error);
-    } else {
-      submitButton.disabled = false;
+      console.error(`paymentForm --`, error);
     }
+
+    console.info('paymentForm -- capturing the payment');
   },
 
   async createPaymentIntent() {
-    const data = await (await fetch('/create-payment-intent')).json();
-    console.log(data);
+    const intent = await (
+      await fetch('/pay', {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({
+          currency: this.currency,
+          amount: parseFloat(this.donationAmount),
+        }),
+      })
+    ).json();
 
-    // return data.client_secret;
-    console.info('-- payment intent created');
-    return 'pi_1Dpeav2eZvKYlo2CwsowXp2k_secret_GvmBEoWO7yqbjMgU0YrwLtgDR';
+    console.info('paymentForm -- payment intent created');
+    return intent.client_secret;
   },
 });
 

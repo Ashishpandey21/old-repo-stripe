@@ -598,3 +598,8 @@ a.text-grey,
     margin-bottom: 35px;
   }
 }
+
+// FIXME
+.loading > .spinner-border {
+  display: block !important;
+}

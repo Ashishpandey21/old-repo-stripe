@@ -17,6 +17,7 @@ export class StripeRepoService {
         amount: paymentIntent.amount,
         currency: paymentIntent.currency,
         payment_method_types: [CARD],
+        description: `Donation to SIL Language Technology`,
       });
       return intent;
     } catch (e) {
