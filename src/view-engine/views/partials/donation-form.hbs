@@ -1,0 +1,218 @@
+<div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
+  <form x-data="{ donationType: 'oneTime' }">
+    <div class="toggle-sec">
+      <div class="row mb-3">
+        <div class="form-group col-12 mb-3">
+          <h2 class="float-start">Donate Now</h2>
+          <div class="custom-select-wrap text-end">
+            <select class="custom-select min-width-100px" id="inlineFormCustomSelectPref">
+              <option selected>USD $</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-12 mb-3">
+          <div class="row">
+            <div class="col-md-4 col-5">
+              <div class="form-check radio-lg">
+                <input class="form-check-input" type="radio" name="donateOptions" id="oneTime" value="oneTime"
+                  x-model="donationType" checked>
+                <label class="form-check-label" for="oneTime">
+                  One Time
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 col-7">
+              <div class="form-check radio-lg">
+                <input class="form-check-input" type="radio" name="donateOptions" id="monthlyRecurring"
+                  value="monthlyRecurring" x-model="donationType" checked>
+                <label class="form-check-label" for="monthlyRecurring">
+                  Monthly Recurring
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-12">
+          <div class="radio-group row">
+            <div class="col-6 col-md-2 mb-3">
+              <div class="form-check mb-0 h-100">
+                <input class="form-check-input" type="radio" name="amount" id="amountOne" checked>
+                <label class="form-check-label mb-0 f-center" for="amountOne">
+                  <span>$25</span><i class="far fa-check-circle"></i>
+                </label>
+              </div>
+            </div>
+            <div class="col-6 col-md-2 mb-3">
+              <div class="form-check mb-0 h-100">
+                <input class="form-check-input" type="radio" name="amount" id="amountTwo" checked>
+                <label class="form-check-label mb-0 f-center" for="amountTwo">
+                  <span>$50</span><i class="far fa-check-circle"></i>
+                </label>
+              </div>
+            </div>
+            <div class="col-6 col-md-2 mb-3">
+              <div class="form-check mb-0 h-100">
+                <input class="form-check-input" type="radio" name="amount" id="amountThree" checked>
+                <label class="form-check-label mb-0 f-center" for="amountThree">
+                  <span>$100</span><i class="far fa-check-circle"></i>
+                </label>
+              </div>
+            </div>
+            <div class="col-6 col-md-2 mb-3">
+              <div class="form-check mb-0 h-100">
+                <input class="form-check-input" type="radio" name="amount" id="amountFour" checked>
+                <label class="form-check-label mb-0 f-center" for="amountFour">
+                  <span>$200</span><i class="far fa-check-circle"></i>
+                </label>
+              </div>
+            </div>
+            <template x-if="donationType === 'oneTime'">
+              <div class="input-icon-wrap d-flex col-12 col-md-auto mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text h-100 px-3" id="basic-addon1">$</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Other amount" aria-label="Other amount"
+                  aria-describedby="basic-addon1">
+              </div>
+            </template>
+            <template x-if="donationType === 'monthlyRecurring'">
+              <div class="col-6 col-md-2 mb-3">
+                <div class="form-check mb-0 h-100">
+                  <input class="form-check-input" type="radio" name="amount" id="amountFive" checked>
+                  <label class="form-check-label mb-0 f-center" for="amountFive">
+                    <span>$500</span><i class="far fa-check-circle"></i>
+                  </label>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="form-group col-12 mb-3">
+          <div class="form-check checkbox-lg">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">
+              Please add <span>$0.00</span> to my donation to cover the processing fee.
+            </label>
+          </div>
+        </div>
+        <div class="form-group col-12 mb-3">
+          <textarea class="form-control resizer-none" id="comments" rows="3" placeholder="Comments"></textarea>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-4 min-width-300">Next</button>
+    </div>
+    <div class="toggle-sec">
+      <h2 class="mb-3">
+        <button class="btn btn-no-style responsive-items">
+          <i class="fas fa-angle-left"></i>
+        </button>
+        Personal Info
+      </h2>
+      <div class="row">
+        <div class="form-group col-md-4 mb-4">
+          <label for="salutation">Salutation</label>
+          <div class="custom-select-wrap text-end">
+            <select class="custom-select w-100" id="salutation">
+              <option value="1">Mr.</option>
+              <option value="2">Mrs.</option>
+              <option value="3">Mr. and Mrs.</option>
+              <option value="4">Ms.</option>
+              <option value="5">Miss.</option>
+              <option value="6">Dr.</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="firstName">First Name<sup>*</sup></label>
+          <input type="text" class="form-control" id="firstName">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="lastName">Last Name<sup>*</sup></label>
+          <input type="text" class="form-control" id="lastName">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="email">Email<sup>*</sup></label>
+          <input type="email" class="form-control" id="email">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="email">Phone<sup>*</sup></label>
+          <input type="number" class="form-control" id="phoneNumber">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="company">Company<sup>*</sup></label>
+          <input type="text" class="form-control" id="company">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="country">Country<sup>*</sup></label>
+          <div class="custom-select-wrap text-end">
+            <select id="country" class="custom-select w-100" x-data="{ countries: [] }"
+              x-init="countries = await (await fetch('https://restcountries.com/v3.1/all')).json()">
+              <option selected x-text="Choose..."></option>
+              <template x-for="country in countries">
+                <option x-text="country.name.common"></option>
+              </template>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="city">City<sup>*</sup></label>
+          <input type="text" class="form-control" id="city">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="state">State<sup>*</sup></label>
+          <input type="text" class="form-control" id="state">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="zipPostalCode">Zip/Postal Code<sup>*</sup></label>
+          <input type="text" class="form-control" id="zipPostalCode">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="Address1">Address 1<sup>*</sup></label>
+          <input type="text" class="form-control" id="Address1">
+        </div>
+        <div class="form-group col-md-4 mb-4">
+          <label for="Address2">Address 2<sup>*</sup></label>
+          <input type="text" class="form-control" id="Address2">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-4 min-width-300">Next</button>
+    </div>
+    <div class="toggle-sec">
+      <h2 class="mb-3">
+        <button class="btn btn-no-style responsive-items">
+          <i class="fas fa-angle-left"></i>
+        </button>
+        Payment Info
+      </h2>
+      <div class="row stripe-form">
+        <div class="form-group col-md-5 mb-4">
+          <label for="cardNumber-element">
+            Credit Card Number
+            <sup>*</sup>
+          </label>
+          <div id="cardNumber-element" class="form-control"></div>
+        </div>
+        <div class="form-group col-md-3 mb-4">
+          <label for="cardCvc-element">
+            Security Code
+            <sup>*</sup>
+          </label>
+          <div id="cardCvc-element" class="form-control"></div>
+        </div>
+        <div class="form-group col-md-3 mb-4">
+          <label for="cardExpiry-element">
+            Expiration Date
+            <sup>*</sup>
+          </label>
+          <div id="cardExpiry-element" class="form-control"></div>
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary mt-4 min-width-300">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

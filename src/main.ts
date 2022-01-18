@@ -40,7 +40,7 @@ async function bootstrap() {
 
   const config = app.get(ConfigService);
   app.enableCors();
-  app.use(helmet({ crossOriginEmbedderPolicy: false }));
+  app.use(helmet({ contentSecurityPolicy: false }));
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 

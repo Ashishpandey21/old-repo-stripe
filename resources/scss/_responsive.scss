@@ -1,0 +1,119 @@
+@media(min-width: 576px) {}
+
+@media(min-width: 768px) {
+
+  .responsive-items {
+    display: none;
+  }
+
+  .custom-card {
+    border-color: $cmn-border;
+    border-radius: 6px;
+  }
+
+  .body-blue-md {
+    background-color: $body-blue !important;
+  }
+}
+
+@media(min-width: 992px) {}
+
+@media(min-width: 1200px) {}
+
+@media(min-width: 1600px) {}
+
+@media(max-width: 1599px) {}
+
+@media(max-width: 1199px) {}
+
+@media(max-width: 991px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media(max-width: 767px) {
+  html {
+    font-size: 14px;
+  }
+
+  .custom-border-top-sm {
+    border-top: 1px solid $cmn-border;
+  }
+
+  .custom-card {
+    border: none;
+  }
+
+  .main-header {
+    background-color: $white !important;
+    border-bottom: 1px solid $cmn-border;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+  }
+
+  .custom-modal {
+    .modal-dialog {
+      position: static;
+    }
+
+    .modal-body {
+      height: 100%;
+    }
+
+    .content-mobile {
+      background-color: $blue;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        position: absolute;
+        height: 100%;
+        width: 70%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}
+
+@media(max-width: 575px) {
+  html {
+    font-size: 13px;
+  }
+
+  .mt-5 {
+    margin-top: 25px !important;
+  }
+
+  .pt-5 {
+    padding-top: 25px !important;
+  }
+
+  h1,
+  .h1 {
+    font-size: 19px;
+  }
+
+  h2,
+  .h2 {
+    font-size: 17px;
+  }
+  .main-header {
+    .navbar-brand{
+      height: 28px;
+      .btn{
+        font-size: 10px !important;
+      }
+    }
+    .nav-item .btn{
+      padding: 5px 10px !important;
+      font-size: 12px;
+    }
+  }
+}

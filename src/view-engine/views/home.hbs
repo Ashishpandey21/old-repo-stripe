@@ -1,0 +1,60 @@
+{{#extend (layoutName "master") filename="home"}}
+{{#content "head"}}
+{{> head}}
+<script src="//unpkg.com/alpinejs" defer></script>
+<script src="/scripts/checkout.js" defer></script>
+{{/content}}
+
+{{#content "title"}}
+Donate to SIL
+{{/content}}
+
+{{#content "mainContent"}}
+{{> header}}
+<main>
+  <section class="donate-sec container-xl pt-5">
+    <div class="row">
+      <div class="col-lg-4 toggle-sec">
+        <img src="images/group@2x.png" class="img-fluid" alt="Group Image">
+        <p>SIL International is a faith-based nonprofit organization committed to serving language
+          communities worldwide as they build capacity for sustainable language development. SIL does this
+          primarily through research, translation, training and materials development. SIL works alongside
+          ethnolinguistic communities and their partners as they discover how language development
+          addresses the challenging areas of their daily lives—social, cultural, political, economic and
+          spiritual. SIL Language Technology supports these activities by developing software, fonts and
+          keyboards</p>
+      </div>
+      {{> donation_form}}
+    </div>
+  </section>
+</main>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentSuccess">
+  Launch demo modal
+</button>
+<div class="modal fade custom-modal text-center" id="paymentSuccess" aria-hidden="true"
+  aria-labelledby="paymentSuccessLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered justify-content-center">
+    <div class="modal-content d-none d-md-block">
+      <div class="modal-body">
+        <button type="button" class="btn-close f-center" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="img-wrap f-center mx-auto">
+          <img src="/images/starts.svg" alt="">
+          <i class="fas fa-check-circle fa-3x"></i>
+        </div>
+        <h4 class="mt-4">Payment Successful</h4>
+        <button class="btn btn-blue mt-4" data-bs-dismiss="modal" aria-label="Close">Done</button>
+      </div>
+    </div>
+    <div class="modal-content d-flex d-md-none content-mobile">
+      <img src="/images/Group 90.svg" alt="">
+      <div class="position-relative text-white">
+        <h3 class="mt-4">Payment Successful</h3>
+        <button class="btn mt-5 btn-white" data-bs-dismiss="modal" aria-label="Close">Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{/content}}
+{{/extend}}

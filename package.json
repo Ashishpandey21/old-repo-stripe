@@ -20,7 +20,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "app:command": "ts-node src/cli.ts"
+    "app:command": "ts-node src/cli.ts",
+    "css:dev": "sass resources/scss/style.scss public/css/style.css --style compressed --watch",
+    "css:prod": "sass resources/scss/style.scss public/css/style.css --style compressed"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.6.0",
@@ -55,6 +57,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "sass": "^1.48.0",
     "sequelize": "^6.6.5",
     "sequelize-cli": "^6.2.0",
     "sequelize-typescript": "^2.1.0",

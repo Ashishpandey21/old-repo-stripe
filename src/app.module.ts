@@ -26,7 +26,6 @@ import { PassportModule } from '@nestjs/passport';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MethodChangeMiddleware } from './helpers/middlewares/method-change/method-change.middleware';
 import { ModelBootstrapModule } from './databases/model-bootstrap/model-bootstrap.module';
-import { DashboardModule } from './dashboard/dashboard.module';
 import { FaqsModule } from './faqs/faqs.module';
 import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
 
@@ -58,7 +57,6 @@ import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
       wildcard: true,
       delimiter: '.',
     }),
-    DashboardModule,
     FaqsModule,
   ],
   controllers: [AppController],

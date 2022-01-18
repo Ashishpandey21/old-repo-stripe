@@ -1,0 +1,40 @@
+.main-header {
+  .navbar {
+    padding: 1.125rem 15px;
+  }
+
+  .navbar-brand {
+    height: 50px;
+    padding: 0;
+    .btn{
+      margin-left: 4px;
+      border-radius: 0 !important;
+      padding-left: 6px !important;
+      padding-right: 6px !important;
+    }
+  }
+
+  .nav-item {
+    .btn {
+      line-height: 1.4;
+      color: $black-100;
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
+    &:hover,
+    &.active {
+      .btn {
+        background-color: $blue;
+        color: $white;
+      }
+    }
+
+    &:not(:first-child) {
+      margin-left: 1rem;
+    }
+  }
+}
