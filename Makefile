@@ -1,7 +1,6 @@
 .PHONY: build
 build:
-	yarn build
-	yarn css:prod
+	yarn build && yarn css:prod
 
 .PHONY: watch
 watch: build

@@ -1,5 +1,5 @@
 <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-  <form x-data="{ donationType: 'oneTime' }">
+  <form x-data="paymentForm('{{stripePublishableKey}}')" @submit.prevent="submit">
     <div class="toggle-sec">
       <div class="row mb-3">
         <div class="form-group col-12 mb-3">

@@ -51,3 +51,8 @@ export interface ViewConfig {
   viewPath: string;
   publicPath: string;
 }
+
+export interface StripeConfig {
+  secretKey: string;
+  publishableKey: string;
+}

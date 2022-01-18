@@ -8,6 +8,7 @@ import { mailConfig } from './configs/mail';
 import { sessionConfig } from './configs/session';
 import { jwtConfig } from './configs/jwt';
 import { viewConfig } from './configs/view';
+import { stripeConfig } from './configs/stripe';
 
 const envSuffix = !!process.env.OVERRIDE_ENV
   ? `.${process.env.OVERRIDE_ENV}`
@@ -26,6 +27,7 @@ const envFileName = getEnvFileName(envSuffix);
         sessionConfig,
         jwtConfig,
         viewConfig,
+        stripeConfig,
       ],
       envFilePath: envFileName,
       isGlobal: true,

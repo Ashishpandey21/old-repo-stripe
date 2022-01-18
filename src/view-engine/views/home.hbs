@@ -1,8 +1,9 @@
 {{#extend (layoutName "master") filename="home"}}
 {{#content "head"}}
 {{> head}}
-<script src="//unpkg.com/alpinejs" defer></script>
-<script src="/scripts/checkout.js" defer></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script defer src="/scripts/payment-form.js"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 {{/content}}
 
 {{#content "title"}}
