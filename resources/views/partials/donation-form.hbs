@@ -1,5 +1,8 @@
 <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-  <form x-data="paymentForm('{{stripePublishableKey}}')" @submit.prevent="submit">
+  <form
+    x-data="paymentForm('{{stripePublishableKey}}')"
+    x-ref="paymentForm"
+    @submit.prevent="submit">
     <div class="toggle-sec">
       <div class="row mb-3">
         <div class="form-group col-12 mb-3">
@@ -80,6 +83,7 @@
                 <input
                     type="text"
                     class="form-control"
+                    x-model="donationAmount"
                     placeholder="Other amount"
                     aria-label="Other amount"
                     aria-describedby="basic-addon1">

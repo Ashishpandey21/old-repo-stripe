@@ -27,6 +27,13 @@ class PaymentElement {
     console.info('PaymentElement -- destroyed');
   }
 
+  clear() {
+    for (const el of this.elements._elements) {
+      el.clear();
+    }
+    console.info('PaymentElement -- cleared');
+  }
+
   updateSecretKey(secretKey) {
     this.secretKey = secretKey;
     this.destroy();
@@ -146,7 +153,8 @@ const paymentForm = (stripePublishableKey) => ({
   },
 
   resetForm() {
-    // FIXME: reset form
+    this.$refs.paymentForm.reset();
+    this.stripeElement.clear();
   },
 
   async submit() {
@@ -182,9 +190,9 @@ const paymentForm = (stripePublishableKey) => ({
     );
 
     if (paymentIntent && paymentIntent.status === 'succeeded') {
-      console.info(`paymentForm -- payment successfull`);
       this.resetForm();
       showSuccessModal();
+      console.info(`paymentForm -- payment successfull`);
     }
 
     if (error) {
