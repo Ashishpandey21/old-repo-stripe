@@ -17,7 +17,7 @@ export class ViewEngineConfigService implements OnApplicationBootstrap {
     const viewConfig = this.configService.get<ViewConfig>('view');
     this.hbs.registerPartials(join(viewConfig.viewPath, 'partials'));
     this.hbs.registerHelper('layoutName', function (name: string) {
-      return `./dist/view-engine/views/layouts/${name}`;
+      return `./resources/views/layouts/${name}`;
     });
     layouts.register(this.hbs.handlebars);
   }

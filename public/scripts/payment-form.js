@@ -1,3 +1,6 @@
+const showSuccessModal = () =>
+  new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
+
 class PaymentElement {
   constructor(stripe) {
     this.stripe = stripe;
@@ -181,7 +184,7 @@ const paymentForm = (stripePublishableKey) => ({
     if (paymentIntent && paymentIntent.status === 'succeeded') {
       console.info(`paymentForm -- payment successfull`);
       this.resetForm();
-      new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
+      showSuccessModal();
     }
 
     if (error) {

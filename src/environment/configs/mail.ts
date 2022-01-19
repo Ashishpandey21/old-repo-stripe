@@ -6,7 +6,7 @@ export const mailConfig = () => {
   const config: MailConfig = {
     driver: process.env.MAIL_DRIVER,
     template: {
-      dir: join(process.cwd(), 'dist', 'view-engine', 'views', 'emails'),
+      dir: join(process.cwd(), 'resources', 'views', 'emails'),
       options: {
         strict: true,
       },
@@ -17,14 +17,7 @@ export const mailConfig = () => {
     },
     options: {
       partials: {
-        dir: join(
-          process.cwd(),
-          'dist',
-          'view-engine',
-          'views',
-          'emails',
-          'partials',
-        ),
+        dir: join(process.cwd(), 'resources', 'views', 'emails', 'partials'),
         options: {
           strict: true,
         },

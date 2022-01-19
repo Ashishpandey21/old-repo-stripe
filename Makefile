@@ -4,4 +4,4 @@ build:
 
 .PHONY: watch
 watch: build
-	find public/ src/ resources/ | entr -c -r yarn start:prod
+	find public/ src/ resources/ | entr -cr yarn start:prod
