@@ -207,6 +207,31 @@ form {
       line-height: inherit;
     }
   }
+  &.loading {
+    position: relative;
+    &::after{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background-color: rgba($white, .7);
+      z-index: 1;
+    }
+    .spinner-wrapper{
+      display: flex;
+    }
+  }
+  .spinner-wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    display: none;
+  }
 }
 
 input[type="number"] {
@@ -597,9 +622,4 @@ a.text-grey,
   img {
     margin-bottom: 35px;
   }
-}
-
-// FIXME
-.loading > .spinner-border {
-  display: block !important;
 }

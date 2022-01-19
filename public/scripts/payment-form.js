@@ -115,7 +115,6 @@ const paymentForm = (stripePublishableKey) => ({
   },
 
   init() {
-    this.fetchingPaymentIntent = false;
     this.stripeElement = new PaymentElement(Stripe(stripePublishableKey));
 
     const mountPaymentElement = async () => {
