@@ -48,10 +48,6 @@ const initialState = () => ({
   donationType: 'oneTime',
   donationAmount: '25',
 
-  currency: 'usd',
-  donationType: 'oneTime',
-  donationAmount: '25',
-
   salutation: 'Mr.',
   firstName: '',
   lastName: '',
@@ -85,6 +81,23 @@ const paymentForm = (stripePublishableKey) => ({
     cad: '$',
   },
 
+  get donationAmounts() {
+    const amounts = {
+      usd: ['25', '50', '100', '200', '500'],
+      aud: ['30', '60', '100', '200', '500'],
+      eur: ['15', '40', '80', '150', '500'],
+      gbp: ['15', '30', '60', '100', '500'],
+      krw: ['20', '50', '100', '200', '500'],
+      nzd: ['50', '100', '200', '500', '800'],
+      thb: ['500', '1000', '2000', '5000', '10000'],
+      jpy: ['2000', '5000', '10000', '20000', '500000'],
+      brl: ['80', '200', '400', '800', '1000'],
+      cad: ['20', '70', '100', '200', '500'],
+    }[this.currency];
+
+    return this.donationType === 'oneTime' ? amounts.slice(0, -1) : amounts;
+  },
+
   get fullName() {
     return `${this.salutation} ${this.firstName} ${this.lastName}`;
   },
@@ -95,23 +108,6 @@ const paymentForm = (stripePublishableKey) => ({
 
   get currencySymbol() {
     return this.currencies[this.currency];
-  },
-
-  get donationAmounts() {
-    const amounts = {
-      usd: ['25', '50', '100', '200', '500'],
-      aud: ['25', '50', '100', '200', '500'],
-      eur: ['25', '50', '100', '200', '500'],
-      gbp: ['25', '50', '100', '200', '500'],
-      krw: ['25', '50', '100', '200', '500'],
-      nzd: ['25', '50', '100', '200', '500'],
-      thb: ['25', '50', '100', '200', '500'],
-      jpy: ['25', '50', '100', '200', '500'],
-      brl: ['25', '50', '100', '200', '500'],
-      cad: ['25', '50', '100', '200', '500'],
-    }[this.currency];
-
-    return this.donationType === 'oneTime' ? amounts.slice(0, -1) : amounts;
   },
 
   init() {
@@ -126,7 +122,7 @@ const paymentForm = (stripePublishableKey) => ({
     /**
      * Prevent click bombing.
      * Wait for ${waitFor} seconds before creating a payment intent.
-     * If user changes the payment intent props within those 2 seconds,
+     * If user changes the payment intent props within those ${waitFor} seconds,
      * cancel the old request and create a new one.
      */
     const waitFor = 1 * 1000;
@@ -154,6 +150,11 @@ const paymentForm = (stripePublishableKey) => ({
   resetForm() {
     this.$refs.paymentForm.reset();
     this.stripeElement.clear();
+
+    const { currency, donationType, donationAmount } = initialState();
+    this.currency = currency;
+    this.donationType = donationType;
+    this.donationAmount = donationAmount;
   },
 
   async submit() {
@@ -202,27 +203,31 @@ const paymentForm = (stripePublishableKey) => ({
   },
 
   async createPaymentIntent() {
-    const intent = await (
-      await fetch('/pay', {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: JSON.stringify({
-          currency: this.currency,
-          amount: parseFloat(this.donationAmount),
-        }),
-      })
-    ).json();
+    try {
+      const intent = await (
+        await fetch('/pay', {
+          method: 'POST',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+          body: JSON.stringify({
+            currency: this.currency,
+            amount: parseFloat(this.donationAmount),
+          }),
+        })
+      ).json();
 
-    console.info('paymentForm -- payment intent created');
-    return intent.client_secret;
+      console.info('paymentForm -- payment intent created');
+      return intent.client_secret;
+    } catch (e) {
+      console.error('paymentForm --', e.message);
+    }
   },
 });
 

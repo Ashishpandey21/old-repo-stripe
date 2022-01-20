@@ -1,12 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CARD, STRIPE_CLIENT } from '../../constants';
+import { ConfigService } from '@nestjs/config';
+import { SystemConfig } from 'src/environment/interfaces/environment-types.interface';
 import { Stripe } from 'stripe';
-import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-payment-intent.dto';
+import { CARD, STRIPE_CLIENT } from '../../constants';
 import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confirm-payment-intent.dto';
+import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-payment-intent.dto';
 
 @Injectable()
 export class StripeRepoService {
-  constructor(@Inject(STRIPE_CLIENT) private stripe: Stripe) {}
+  constructor(
+    @Inject(STRIPE_CLIENT) private stripe: Stripe,
+    private readonly configService: ConfigService,
+  ) {}
 
   /**
    * It Will create new intent
@@ -14,10 +19,13 @@ export class StripeRepoService {
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
     try {
       const intent = await this.stripe.paymentIntents.create({
-        amount: paymentIntent.amount,
+        amount: this.getLowestDenomination(paymentIntent),
         currency: paymentIntent.currency,
         payment_method_types: [CARD],
-        description: `Donation to SIL Language Technology`,
+        description: 'Donation to SIL',
+        // description: `Donation to ${this.configService.get<SystemConfig>(
+        //   'appName',
+        // )}`,
       });
       return intent;
     } catch (e) {
@@ -29,6 +37,29 @@ export class StripeRepoService {
         console.log(e.message);
         return false;
       }
+    }
+  }
+
+  /**
+   * Return the lowest denomination of the given currency.
+   */
+  private getLowestDenomination(paymentIntent: CreatePaymentIntentDto): number {
+    const { amount, currency } = paymentIntent;
+
+    switch (currency) {
+      case 'usd':
+      case 'aud':
+      case 'eur':
+      case 'gbp':
+      case 'krw':
+      case 'nzd':
+      case 'thb':
+      case 'brl':
+      case 'cad':
+        return amount * 100;
+
+      case 'jpy':
+        return amount;
     }
   }
 

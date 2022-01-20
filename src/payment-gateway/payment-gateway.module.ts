@@ -3,8 +3,10 @@ import { StripePaymentGatewayController } from './controllers/stripe-payment-gat
 import { Stripe } from 'stripe';
 import { StripeRepoService } from './services/stripe-repo/stripe-repo.service';
 import { STRIPE_CLIENT } from './constants';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
+  imports: [ConfigModule],
   controllers: [StripePaymentGatewayController],
   providers: [StripeRepoService],
 })

@@ -11,6 +11,7 @@ export interface SystemConfig {
   maxRssMemory: number;
   debug: boolean;
   checkMemory: boolean;
+  appName: string;
 }
 
 export interface ClusterConfig {

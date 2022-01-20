@@ -75,7 +75,10 @@ async function bootstrap() {
   app.setBaseViewsDir(viewConfig.viewPath);
   app.setViewEngine('hbs');
 
-  await app.listen(config.get<SystemConfig>('system').port);
+  const port = config.get<SystemConfig>('system').port;
+  await app.listen(port, () => {
+    console.info(`\n-- Listening on http://localhost:${port}/\n`);
+  });
 }
 
 /**

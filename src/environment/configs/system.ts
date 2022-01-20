@@ -17,6 +17,7 @@ export const systemConfig = () => {
       url: !!process.env.APP_URL
         ? process.env.APP_URL
         : `http://localhost:${port}`,
+      appName: process.env.APP_NAME,
     } as SystemConfig,
   };
 };
