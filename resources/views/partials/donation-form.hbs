@@ -1,6 +1,6 @@
 <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
   <form x-data="paymentForm('{{stripePublishableKey}}')" x-ref="paymentForm" @submit.prevent="submit">
-    <div class="toggle-sec">
+    <div class="toggle-sec" x-bind:class="{'d-none d-md-block': toggleSecState !== 'donation-type' }">
       <div class="row mb-3">
         <div class="form-group col-12 mb-3">
           <h2 class="float-start">Donate Now</h2>
@@ -82,11 +82,19 @@
           <textarea class="form-control resizer-none" id="comments" rows="3" placeholder="Comments"></textarea>
         </div>
       </div>
-      <button class="btn btn-primary mt-4 min-width-300 d-block d-md-none">Next</button>
+      <button
+        x-on:click="navigator('personal-info')"
+        type="button"
+        class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+        Next
+      </button>
     </div>
-    <div class="toggle-sec">
+    <div class="toggle-sec" x-bind:class="{'d-none d-md-block': toggleSecState !== 'personal-info' }">
       <h2 class="mb-3">
-        <button class="btn btn-no-style responsive-items">
+        <button
+          type="button"
+          x-on:click="navigator('donation-type', false)"
+          class="btn btn-no-style responsive-items">
           <i class="fas fa-angle-left"></i>
         </button>
         Personal Info
@@ -159,11 +167,19 @@
           <input type="text" class="form-control" id="Address2" x-model="address2">
         </div>
       </div>
-      <button class="btn btn-primary mt-4 min-width-300 d-block d-md-none">Next</button>
+      <button
+        type="button"
+        x-on:click="navigator('payment-info')"
+        class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+        Next
+      </button>
     </div>
-    <div class="toggle-sec">
+    <div class="toggle-sec" x-bind:class="{'d-none d-md-block': toggleSecState !== 'payment-info' }">
       <h2 class="mb-3">
-        <button class="btn btn-no-style responsive-items">
+        <button
+          type="button"
+          x-on:click="navigator('personal-info', false)"
+          class="btn btn-no-style responsive-items">
           <i class="fas fa-angle-left"></i>
         </button>
         Payment Info

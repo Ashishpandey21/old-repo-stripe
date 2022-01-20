@@ -1,6 +1,3 @@
-const showSuccessModal = () =>
-  new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
-
 class PaymentElement {
   constructor(stripe) {
     this.stripe = stripe;
@@ -65,6 +62,9 @@ const initialState = () => ({
 const paymentForm = (stripePublishableKey) => ({
   stripeElement: null,
   fetchingPaymentIntent: true,
+
+  // can be: ['donation-type', 'personal-info', 'payment-info']
+  toggleSecState: 'donation-type',
 
   ...initialState(),
 
@@ -143,8 +143,9 @@ const paymentForm = (stripePublishableKey) => ({
     console.info('paymentForm -- instantiated');
   },
 
-  validateForm() {
-    // FIXME: validate data
+  validateForm(formName) {
+    // FIXME: validate the input fields
+    console.log(`paymentForm -- validating ${formName}`);
   },
 
   resetForm() {
@@ -155,6 +156,38 @@ const paymentForm = (stripePublishableKey) => ({
     this.currency = currency;
     this.donationType = donationType;
     this.donationAmount = donationAmount;
+  },
+
+  showSuccessModal() {
+    new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
+  },
+
+  /**
+   * Show/Hide elements in mobile view.
+   */
+  navigator(navigateTo, forward = true) {
+    switch (navigateTo) {
+      case 'donation-type':
+      case 'personal-info':
+      case 'payment-info':
+        if (forward) this.validateForm(navigateTo);
+        this.toggleSecState = navigateTo;
+        this.hideIntroSection(navigateTo !== 'donation-type');
+        window.scroll(0, 0);
+        break;
+
+      default:
+        throw `paymentForm -- Cannot navigate to ${navigateTo}. Invalid navigation key.`;
+    }
+  },
+
+  hideIntroSection(hide) {
+    const selector = '#intro-section';
+    const action = hide ? 'add' : 'remove';
+    document.querySelector(selector).classList[action]('d-none', 'd-md-block');
+    console.info(
+      `paymentForm: ${selector} ${action === 'remove' ? 'shown' : 'removed'}`,
+    );
   },
 
   async submit() {
@@ -191,11 +224,13 @@ const paymentForm = (stripePublishableKey) => ({
 
     if (paymentIntent && paymentIntent.status === 'succeeded') {
       this.resetForm();
-      showSuccessModal();
+      this.showSuccessModal();
+      this.navigator('donation-type');
       console.info(`paymentForm -- payment successfull`);
     }
 
     if (error) {
+      // FIXME: handle error states
       console.error(`paymentForm --`, error);
     }
 
