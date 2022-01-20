@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SystemConfig } from 'src/environment/interfaces/environment-types.interface';
 import { Stripe } from 'stripe';
 import { CARD, STRIPE_CLIENT } from '../../constants';
 import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confirm-payment-intent.dto';
 import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-payment-intent.dto';
+import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
 
 @Injectable()
 export class StripeRepoService {
@@ -47,18 +47,18 @@ export class StripeRepoService {
     const { amount, currency } = paymentIntent;
 
     switch (currency) {
-      case 'usd':
-      case 'aud':
-      case 'eur':
-      case 'gbp':
-      case 'krw':
-      case 'nzd':
-      case 'thb':
-      case 'brl':
-      case 'cad':
+      case CurrencyEnum.USD:
+      case CurrencyEnum.AUD:
+      case CurrencyEnum.EUR:
+      case CurrencyEnum.GBP:
+      case CurrencyEnum.KRW:
+      case CurrencyEnum.NZD:
+      case CurrencyEnum.THB:
+      case CurrencyEnum.BRL:
+      case CurrencyEnum.CAD:
         return amount * 100;
 
-      case 'jpy':
+      case CurrencyEnum.JPY:
         return amount;
     }
   }
