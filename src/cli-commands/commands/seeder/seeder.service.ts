@@ -3,6 +3,7 @@ import { Command } from 'nestjs-command';
 import { ModuleRef } from '@nestjs/core';
 import { Seeder, SeederConstruct } from '../../seeders/seeder';
 import { FaqSeederService } from '../../seeders/faq-seeder/faq-seeder.service';
+import { AdminUserSeederService } from '../../seeders/admin-user-seeder/admin-user-seeder.service';
 
 @Injectable()
 export class SeederService {
@@ -11,7 +12,10 @@ export class SeederService {
     private readonly log: Logger,
   ) {}
 
-  static SeedMaps: SeederConstruct[] = [FaqSeederService];
+  static SeedMaps: SeederConstruct[] = [
+    FaqSeederService,
+    AdminUserSeederService,
+  ];
 
   @Command({
     command: 'seeder:seed',

@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AccessTokenRepoService } from '../oauth/access-token-repo/access-token-repo.service';
 import { RefreshTokenRepoService } from '../oauth/refresh-token-repo/refresh-token-repo.service';
 import { RefreshTokenModel } from '../../../databases/models/oauth/refresh-token.model';
+import { Roles } from '../../../user/constants';
 
 @Injectable()
 export class AuthService {
@@ -115,4 +116,27 @@ export class AuthService {
 
     return this.refreshTokenRepo.find(decodedId);
   }
+
+  /**
+   * Authenticate against admin user
+   * @param email
+   * @param password
+   */
+  public async validateForAdmin(
+    email: string,
+    password: string,
+  ): Promise<UserModel | null> {
+    const user = await this.userRepo.findByRole(email, Roles.ADMIN);
+    console.log(user);
+    if (!user) {
+      return null;
+    }
+
+    if (!(await this.hashEncryptService.checkHash(password, user.password))) {
+      return null;
+    }
+
+    return user;
+  }
 }
+

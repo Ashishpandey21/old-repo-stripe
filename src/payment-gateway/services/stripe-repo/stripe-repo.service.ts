@@ -78,4 +78,12 @@ export class StripeRepoService {
     );
     return confirm.next_action.use_stripe_sdk['stripe_js'];
   }
+
+  /**
+   * Stripe customers List
+   */
+  public async customersList(): Promise<any> {
+    //todo: we can pass param here as {limit: 3,}
+    return this.stripe.customers.list();
+  }
 }

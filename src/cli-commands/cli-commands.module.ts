@@ -17,6 +17,8 @@ import { ModelBootstrapModule } from '../databases/model-bootstrap/model-bootstr
 import { SeederService } from './commands/seeder/seeder.service';
 import { FaqSeederService } from './seeders/faq-seeder/faq-seeder.service';
 import { FaqRepoService } from '../faqs/services/faq-repo/faq-repo.service';
+import { AdminUserSeederService } from './seeders/admin-user-seeder/admin-user-seeder.service';
+import { UserRepoService } from '../user/services/user-repo/user-repo.service';
 
 @Module({
   imports: [CommandModule, EnvironmentModule, ModelBootstrapModule],
@@ -37,6 +39,8 @@ import { FaqRepoService } from '../faqs/services/faq-repo/faq-repo.service';
     SeederService,
     FaqSeederService,
     FaqRepoService,
+    AdminUserSeederService,
+    UserRepoService,
   ],
 })
 export class CliCommandsModule {}

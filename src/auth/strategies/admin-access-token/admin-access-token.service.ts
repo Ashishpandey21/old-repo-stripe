@@ -1,0 +1,97 @@
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  UnprocessableEntityException,
+  ValidationError,
+} from '@nestjs/common';
+import { AuthService } from '../../services/auth/auth.service';
+import { ClientRepoService } from '../../services/oauth/client-repo/client-repo.service';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-custom';
+import { Request } from 'express';
+import { UserModel } from '../../../databases/models/user.model';
+import { ClientModel } from '../../../databases/models/oauth/client.model';
+import { AccessTokenDto } from '../../dtos/access-token/access-token.dto';
+import { validateOrReject } from 'class-validator';
+
+@Injectable()
+export class AdminAccessTokenService extends PassportStrategy(
+  Strategy,
+  'adminAccessToken',
+) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly clientRepo: ClientRepoService,
+  ) {
+    super();
+  }
+
+  /**
+   * Main validation action
+   * @param request
+   */
+  public async validate(
+    request: Request,
+  ): Promise<{ user: UserModel; client: ClientModel }> {
+    // aborting with 404 as accept content is not correct
+    if (!request.headers.accept.toLowerCase().includes('application/json')) {
+      throw new NotFoundException();
+    }
+
+    const payload = await this.validateContent(request.body, AccessTokenDto);
+
+    const client = await this.clientRepo.findForIdAndSecret(
+      payload.client_id,
+      payload.client_secret,
+    );
+
+    if (!client) {
+      const errors: ValidationError[] = [
+        {
+          property: 'credentials',
+          constraints: {
+            credentials: 'Client credentials are invalid',
+          },
+          children: [],
+        },
+      ];
+      throw new UnprocessableEntityException(errors);
+    }
+
+    const user = await this.authService.validateForAdmin(
+      payload.email,
+      payload.password,
+    );
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return {
+      user,
+      client,
+    };
+  }
+
+  /**
+   * Validate content of body and return dto object
+   * @param body
+   * @param dtoInstance
+   */
+  public async validateContent(
+    body: {
+      [key: string]: any;
+    },
+    dtoInstance: { new (content: any): AccessTokenDto },
+  ): Promise<AccessTokenDto> {
+    const payload = new dtoInstance(body);
+    try {
+      await validateOrReject(payload);
+    } catch (err) {
+      throw new UnprocessableEntityException(err);
+    }
+
+    return payload;
+  }
+}

@@ -15,6 +15,8 @@ import { OauthController } from './controllers/oauth/oauth.controller';
 import { ClientRepoService } from './services/oauth/client-repo/client-repo.service';
 import { AccessTokenRepoService } from './services/oauth/access-token-repo/access-token-repo.service';
 import { RefreshTokenRepoService } from './services/oauth/refresh-token-repo/refresh-token-repo.service';
+import { AdminOauthController } from './controllers/admin-oauth/admin-oauth.controller';
+import { AdminAccessTokenService } from './strategies/admin-access-token/admin-access-token.service';
 
 @Global()
 @Module({
@@ -37,8 +39,9 @@ import { RefreshTokenRepoService } from './services/oauth/refresh-token-repo/ref
     ClientRepoService,
     AccessTokenRepoService,
     RefreshTokenRepoService,
+    AdminAccessTokenService,
   ],
-  controllers: [LoginController, OauthController],
+  controllers: [LoginController, OauthController, AdminOauthController],
   exports: [AuthService, HashEncryptService],
 })
 export class AuthModule {}

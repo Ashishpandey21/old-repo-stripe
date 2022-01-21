@@ -2,6 +2,7 @@
 
 import { QueryInterface, Sequelize } from 'sequelize';
 import { DataType } from 'sequelize-typescript';
+import { Roles } from '../../user/constants';
 
 module.exports = {
   up: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
@@ -27,6 +28,12 @@ module.exports = {
         type: DataType.STRING,
         allowNull: true,
         defaultValue: null,
+      },
+      role: {
+        type: DataType.ENUM,
+        values: [Roles.USER, Roles.ADMIN],
+        allowNull: true,
+        defaultValue: Roles.USER,
       },
       created_at: {
         type: DataType.DATE,
