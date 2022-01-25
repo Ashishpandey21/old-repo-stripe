@@ -80,10 +80,58 @@ export class StripeRepoService {
   }
 
   /**
+   * Stripe all customer Ids List
+   */
+  public async totalCustomerIds(filterObj): Promise<any> {
+    const customerIds = [];
+    filterObj['limit'] = 100;
+    for await (const customer of this.stripe.customers.list(filterObj)) {
+      customerIds.push(customer.id);
+    }
+
+    return customerIds;
+  }
+
+  /**
    * Stripe customers List
    */
-  public async customersList(): Promise<any> {
-    //todo: we can pass param here as {limit: 3,}
-    return this.stripe.customers.list();
+  public async customersList(params): Promise<any> {
+    const email = params.email;
+    const limit = params.limit;
+    const page = params.page;
+
+    const listObj = {
+      limit: limit,
+    };
+
+    const filterObj = {};
+
+    if (email) {
+      listObj['email'] = email;
+      filterObj['email'] = email;
+    }
+
+    //todo: need to refactor the code of getting total customers
+    const customerIds = await this.totalCustomerIds(filterObj);
+
+    console.log('customerIds: ', customerIds);
+
+    if (page > 1) {
+      const lastCustomerId = customerIds[limit * (page - 1) - 1];
+      if (lastCustomerId) {
+        listObj['starting_after'] = customerIds[limit * (page - 1) - 1];
+      }
+    }
+
+    const customersList = await this.stripe.customers.list(listObj);
+    customersList['totalCustomers'] = customerIds.length;
+    return customersList;
+  }
+
+  /**
+   * Stripe customers Detail
+   */
+  public async customersDetail(customerId: string): Promise<any> {
+    return this.stripe.customers.retrieve(customerId);
   }
 }
