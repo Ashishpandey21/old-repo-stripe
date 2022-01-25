@@ -35,6 +35,21 @@ module.exports = {
         allowNull: true,
         defaultValue: Roles.USER,
       },
+      stripe_user_id: {
+        type: DataType.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      first_name: {
+        type: DataType.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      last_name: {
+        type: DataType.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
       created_at: {
         type: DataType.DATE,
         allowNull: false,

@@ -19,6 +19,8 @@ import { FaqSeederService } from './seeders/faq-seeder/faq-seeder.service';
 import { FaqRepoService } from '../faqs/services/faq-repo/faq-repo.service';
 import { AdminUserSeederService } from './seeders/admin-user-seeder/admin-user-seeder.service';
 import { UserRepoService } from '../user/services/user-repo/user-repo.service';
+import { StripeRepoService } from '../payment-gateway/services/stripe-repo/stripe-repo.service';
+import { UserCreatedMailRepoService } from '../user/services/user-created-mail-repo/user-created-mail-repo.service';
 
 @Module({
   imports: [CommandModule, EnvironmentModule, ModelBootstrapModule],
@@ -41,6 +43,8 @@ import { UserRepoService } from '../user/services/user-repo/user-repo.service';
     FaqRepoService,
     AdminUserSeederService,
     UserRepoService,
+    StripeRepoService,
+    UserCreatedMailRepoService,
   ],
 })
 export class CliCommandsModule {}

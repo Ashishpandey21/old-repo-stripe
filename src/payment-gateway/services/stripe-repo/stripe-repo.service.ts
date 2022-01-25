@@ -5,6 +5,7 @@ import { CARD, STRIPE_CLIENT } from '../../constants';
 import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confirm-payment-intent.dto';
 import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-payment-intent.dto';
 import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
+import { CreateStripeCustomerDto } from '../../dtos/create-stripe-customer/create-stripe-customer.dto';
 
 @Injectable()
 export class StripeRepoService {
@@ -133,5 +134,38 @@ export class StripeRepoService {
    */
   public async customersDetail(customerId: string): Promise<any> {
     return this.stripe.customers.retrieve(customerId);
+  }
+
+  /**
+   * It will create new stripe customer
+   * @param customerData
+   */
+  public createCustomer(customerData: CreateStripeCustomerDto): Promise<any> {
+    return this.stripe.customers.create({
+      address: {
+        line1: customerData.address.line1,
+        city: customerData.address.city,
+        country: customerData.address.country,
+        postal_code: customerData.address.postal_code,
+        state: customerData.address.state,
+      },
+      email: customerData.email,
+      name: customerData.name,
+    });
+  }
+
+  /**
+   * Create Customer Subscription
+   * @param data
+   */
+  public async createUserSubscription(data: any): Promise<any> {
+    return this.stripe.subscriptions.create({
+      customer: data.stripe_user_id,
+      items: [
+        {
+          plan: data.plan,
+        },
+      ],
+    });
   }
 }

@@ -5,12 +5,18 @@ import { InjectModel } from '@nestjs/sequelize';
 import { HashEncryptService } from '../../../auth/services/hash-encrypt/hash-encrypt.service';
 import has = Reflect.has;
 import { hash } from 'bcrypt';
+import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo/stripe-repo.service';
+import { Roles } from '../../constants';
+import { UserCreatedMailRepoService } from '../user-created-mail-repo/user-created-mail-repo.service';
+import { use } from 'passport';
 
 @Injectable()
 export class UserRepoService {
   constructor(
     @InjectModel(UserModel) public userModel: typeof UserModel,
     public hashEncryptService: HashEncryptService,
+    public stripeRepoService: StripeRepoService,
+    public userCreatedEmail: UserCreatedMailRepoService,
   ) {}
 
   /**
@@ -18,13 +24,14 @@ export class UserRepoService {
    * @param email
    * @param transaction
    */
-  public findByEmail(
+  public async findByEmail(
     email: string,
     transaction?: Transaction,
   ): Promise<UserModel | null> {
-    return this.userModel
+    const user = await this.userModel
       .findOne({ where: { email }, transaction })
       .then((result) => (!!result ? result : null));
+    return user;
   }
 
   /**
@@ -74,17 +81,19 @@ export class UserRepoService {
    * @param data
    */
   public async createUser(data): Promise<UserModel> {
-    const hashedPassword = await this.hashEncryptService.createHash(
-      data.password,
-    );
+    const password = this.genPassword();
+    const hashedPassword = await this.hashEncryptService.createHash(password);
     try {
       data.password = hashedPassword;
-      return this.userModel
+      const userCreated = await this.userModel
         .findOrCreate({
           where: { email: data.email },
           defaults: data as any,
         })
-        .then(([result]) => result);
+        .then((result) => result);
+      const user = await this.findByEmail(data.email);
+      // this.userCreatedEmail.sendMail(user.email, password);
+      return user;
     } catch (error) {
       throw new HttpException(
         'Something went wrong',
@@ -103,5 +112,54 @@ export class UserRepoService {
     transaction?: Transaction,
   ): Promise<UserModel[]> {
     return await this.userModel.findAll({ where: { role }, transaction });
+  }
+
+  /**
+   * It will generate a random passowrd for user
+   */
+  public genPassword() {
+    const chars =
+      '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const passwordLength = 12;
+    let password = '';
+    for (let i = 0; i <= passwordLength; i++) {
+      const randomNumber = Math.floor(Math.random() * chars.length);
+      password += chars.substring(randomNumber, randomNumber + 1);
+    }
+    return password;
+  }
+
+  public async createStripeCustomer(data): Promise<UserModel> {
+    const stripeUser = await this.stripeRepoService.createCustomer(data);
+    data.stripe_user_id = stripeUser.id;
+    return this.createUser(data);
+  }
+
+  /**
+   * It will create user
+   * @param data
+   */
+  public async createStripeForUser(data): Promise<UserModel> {
+    const stripe = await this.stripeRepoService.createCustomer(data);
+    const password = this.genPassword();
+    const hashedPassword = await this.hashEncryptService.createHash(password);
+    try {
+      data.password = hashedPassword;
+      data.stripe_user_id = stripe.id;
+      const userCreated = await this.userModel
+        .findOrCreate({
+          where: { email: data.email },
+          defaults: data as any,
+        })
+        .then((result) => result);
+      const user = await this.findByEmail(data.email);
+      // this.userCreatedEmail.sendMail(user.email, password);
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
