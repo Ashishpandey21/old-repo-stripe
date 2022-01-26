@@ -20,6 +20,12 @@ import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confi
 export class StripePaymentGatewayController {
   constructor(private stripeRepoService: StripeRepoService) {}
 
+  @ApiProperty()
+  @Post('config')
+  public getConfig(): Promise<any> {
+    return this.stripeRepoService.getConfig();
+  }
+
   /**
    * It will return after payment created
    */

@@ -6,6 +6,7 @@ import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confi
 import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-payment-intent.dto';
 import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
 import { CreateStripeCustomerDto } from '../../dtos/create-stripe-customer/create-stripe-customer.dto';
+import { StripeConfig } from 'src/environment/interfaces/environment-types.interface';
 
 @Injectable()
 export class StripeRepoService {
@@ -13,6 +14,15 @@ export class StripeRepoService {
     @Inject(STRIPE_CLIENT) private stripe: Stripe,
     private readonly configService: ConfigService,
   ) {}
+
+  public async getConfig(): Promise<any> {
+    const prices = await this.stripe.prices.list();
+
+    return {
+      publishableKey: this.configService.get<StripeConfig>('publishableKey'),
+      prices: prices.data,
+    };
+  }
 
   /**
    * It Will create new intent
