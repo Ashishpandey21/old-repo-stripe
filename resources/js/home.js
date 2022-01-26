@@ -1,44 +1,11 @@
-class PaymentElement {
-  constructor(stripe) {
-    this.stripe = stripe;
-    this.elements = this.stripe.elements();
-    this.secretKey = null;
-  }
-
-  get card() {
-    return this.elements._elements[0];
-  }
-
-  mount() {
-    for (const elementName of ['cardNumber', 'cardCvc', 'cardExpiry']) {
-      const el = this.elements.create(elementName);
-      el.mount(`#${elementName}-element`);
-    }
-    console.info('PaymentElement -- mounted');
-  }
-
-  destroy() {
-    for (const el of this.elements._elements) {
-      el.destroy();
-    }
-    console.info('PaymentElement -- destroyed');
-  }
-
-  clear() {
-    for (const el of this.elements._elements) {
-      el.clear();
-    }
-    console.info('PaymentElement -- cleared');
-  }
-
-  updateSecretKey(secretKey) {
-    this.secretKey = secretKey;
-    this.destroy();
-    this.elements = this.stripe.elements({ secretKey });
-    this.mount();
-    console.info('PaymentElement -- secretKey updated');
-  }
-}
+import Alpine from 'alpinejs';
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  PaymentElement,
+  createPaymentIntent,
+  showSuccessModal,
+} from './helpers.js';
+import '../../resources/scss/style.scss';
 
 const initialState = () => ({
   currency: 'usd',
@@ -59,7 +26,7 @@ const initialState = () => ({
   address2: '',
 });
 
-const paymentForm = (stripePublishableKey) => ({
+const data = (stripePublishableKey) => ({
   stripeElement: null,
   fetchingPaymentIntent: true,
 
@@ -110,11 +77,16 @@ const paymentForm = (stripePublishableKey) => ({
     return this.currencies[this.currency];
   },
 
-  init() {
-    this.stripeElement = new PaymentElement(Stripe(stripePublishableKey));
+  async init() {
+    this.stripeElement = new PaymentElement(
+      await loadStripe(stripePublishableKey),
+    );
 
     const mountPaymentElement = async () => {
-      const clientSecret = await this.createPaymentIntent();
+      const clientSecret = await createPaymentIntent(
+        this.currency,
+        parseFloat(this.donationAmount),
+      );
       this.stripeElement.updateSecretKey(clientSecret);
       this.fetchingPaymentIntent = false;
     };
@@ -140,26 +112,22 @@ const paymentForm = (stripePublishableKey) => ({
 
     mountPaymentElement();
 
-    console.info('paymentForm -- instantiated');
+    console.info('data -- instantiated');
   },
 
   validateForm(formName) {
     // FIXME: validate the input fields
-    console.log(`paymentForm -- validating ${formName}`);
+    console.log(`data -- validating ${formName}`);
   },
 
   resetForm() {
-    this.$refs.paymentForm.reset();
+    this.$refs.capturePayment.reset();
     this.stripeElement.clear();
 
     const { currency, donationType, donationAmount } = initialState();
     this.currency = currency;
     this.donationType = donationType;
     this.donationAmount = donationAmount;
-  },
-
-  showSuccessModal() {
-    new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
   },
 
   /**
@@ -177,7 +145,7 @@ const paymentForm = (stripePublishableKey) => ({
         break;
 
       default:
-        throw `paymentForm -- Cannot navigate to ${navigateTo}. Invalid navigation key.`;
+        throw `data -- Cannot navigate to ${navigateTo}. Invalid navigation key.`;
     }
   },
 
@@ -186,7 +154,7 @@ const paymentForm = (stripePublishableKey) => ({
     const action = hide ? 'add' : 'remove';
     document.querySelector(selector).classList[action]('d-none', 'd-md-block');
     console.info(
-      `paymentForm: ${selector} ${action === 'remove' ? 'shown' : 'removed'}`,
+      `data: ${selector} ${action === 'remove' ? 'shown' : 'removed'}`,
     );
   },
 
@@ -224,48 +192,20 @@ const paymentForm = (stripePublishableKey) => ({
 
     if (paymentIntent && paymentIntent.status === 'succeeded') {
       this.resetForm();
-      this.showSuccessModal();
+      showSuccessModal();
       this.navigator('donation-type');
-      console.info(`paymentForm -- payment successfull`);
+      console.info(`data -- payment successfull`);
     }
 
     if (error) {
       // FIXME: handle error states
-      console.error(`paymentForm --`, error);
+      console.error(`data --`, error);
     }
 
-    console.info('paymentForm -- capturing the payment');
-  },
-
-  async createPaymentIntent() {
-    try {
-      const intent = await (
-        await fetch('/pay', {
-          method: 'POST',
-          mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
-          body: JSON.stringify({
-            currency: this.currency,
-            amount: parseFloat(this.donationAmount),
-          }),
-        })
-      ).json();
-
-      console.info('paymentForm -- payment intent created');
-      return intent.client_secret;
-    } catch (e) {
-      console.error('paymentForm --', e.message);
-    }
+    console.info('data -- capturing the payment');
   },
 });
 
-document.addEventListener('alpine:init', () =>
-  Alpine.data('paymentForm', paymentForm),
-);
+window.Alpine = Alpine;
+document.addEventListener('alpine:init', () => Alpine.data('data', data));
+Alpine.start();

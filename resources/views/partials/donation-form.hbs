@@ -1,5 +1,5 @@
 <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-  <form x-data="paymentForm('{{stripePublishableKey}}')" x-ref="paymentForm" @submit.prevent="submit">
+  <form x-ref="paymentForm" @submit.prevent="submit">
     <div class="toggle-sec" x-bind:class="{'d-none d-md-block': toggleSecState !== 'donation-type' }">
       <div class="row mb-3">
         <div class="form-group col-12 mb-3">

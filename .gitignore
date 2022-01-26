@@ -41,3 +41,4 @@ lerna-debug.log*
 
 # CSS builds
 public/css/*
+public/scripts/*
