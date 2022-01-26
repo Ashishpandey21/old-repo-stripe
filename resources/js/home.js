@@ -9,6 +9,8 @@ import '../../resources/scss/style.scss';
 
 const initialState = () => ({
   currency: 'usd',
+
+  // can be: ['oneTime', 'recurring']
   donationType: 'oneTime',
   donationAmount: '25',
 
@@ -106,9 +108,8 @@ const data = (stripePublishableKey) => ({
       requestTimeoutId = setTimeout(mountPaymentElement, waitFor);
     };
 
-    ['currency', 'donationType', 'donationAmount'].forEach((prop) =>
-      this.$watch(prop, queueCreatePaymentIntentRequest),
-    );
+    this.$watch('donationAmount', queueCreatePaymentIntentRequest);
+    // this.$watch('donationType', (value) => { });
 
     mountPaymentElement();
 
@@ -150,9 +151,9 @@ const data = (stripePublishableKey) => ({
   },
 
   hideIntroSection(hide) {
-    const selector = '#intro-section';
+    const selector = 'intro-section';
     const action = hide ? 'add' : 'remove';
-    document.querySelector(selector).classList[action]('d-none', 'd-md-block');
+    this.$refs[selector].classList[action]('d-none', 'd-md-block');
     console.info(
       `data: ${selector} ${action === 'remove' ? 'shown' : 'removed'}`,
     );
