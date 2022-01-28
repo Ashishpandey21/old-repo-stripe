@@ -13,7 +13,9 @@ Donate to SIL
 <main x-data="data('{{stripePublishableKey}}')">
   <section class="donate-sec container-xl pt-5">
     <div class="row">
-      <div class="col-lg-4 toggle-sec" x-ref="intro-section">
+      <div
+        class="col-lg-4 toggle-sec"
+        x-bind:class="{'d-none d-md-block': toggleSecState !== 'donation-type'}">
         <img src="images/group@2x.png" class="img-fluid" alt="Group Image">
         <p>SIL International is a faith-based nonprofit organization committed to serving language
           communities worldwide as they build capacity for sustainable language development. SIL does this
@@ -26,9 +28,11 @@ Donate to SIL
 
       <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
         <form x-ref="paymentForm" @submit.prevent="submit">
-          {{> form_amount_selection}}
-          {{> form_personal_info}}
-          {{> form_payment_info}}
+          <fieldset>
+            {{> form_amount_selection}}
+            {{> form_personal_info}}
+            {{> form_payment_info}}
+          </fieldset>
         </form>
       </div>
 

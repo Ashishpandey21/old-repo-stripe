@@ -1,49 +1,50 @@
-<div
-  class="toggle-sec d-none"
-  x-ref="payment-info"
-  x-bind:class="{'d-md-block': toggleSecState !== 'payment-info' && donationType === 'oneTime'}">
-  <h2 class="mb-3">
-    <button
-        type="button"
-        x-on:click="navigator('personal-info', false)"
-        class="btn btn-no-style responsive-items">
-      <i class="fas fa-angle-left"></i>
-    </button>
-    Payment Info
-  </h2>
+<template x-if="showPaymentInfo">
+  <div
+    class="toggle-sec"
+    x-bind:class="{ 'd-none d-md-block': toggleSecState !== 'payment-info' }">
+    <h2 class="mb-3">
+      <button
+          type="button"
+          x-on:click="navigator('personal-info', false)"
+          class="btn btn-no-style responsive-items">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      Payment Info
+    </h2>
 
-  <!-- Payment Elements -->
-  <div class="row stripe-form" x-bind:class="fetchingPaymentIntent ? 'loading' : ''">
-    <div class="spinner-wrapper f-center">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+    <!-- Payment Elements -->
+    <div class="row stripe-form" x-bind:class="fetchingPaymentIntent ? 'loading' : ''">
+      <div class="spinner-wrapper f-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <div class="form-group col-md-5 mb-4">
+        <label for="cardNumber-element">
+          Credit Card Number
+          <sup>*</sup>
+        </label>
+        <div id="cardNumber-element" class="form-control"></div>
+      </div>
+      <div class="form-group col-md-3 mb-4">
+        <label for="cardCvc-element">
+          Security Code
+          <sup>*</sup>
+        </label>
+        <div id="cardCvc-element" class="form-control"></div>
+      </div>
+      <div class="form-group col-md-3 mb-4">
+        <label for="cardExpiry-element">
+          Expiration Date
+          <sup>*</sup>
+        </label>
+        <div id="cardExpiry-element" class="form-control"></div>
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-primary mt-4 min-width-300" x-ref="submitButton">
+          Submit
+        </button>
       </div>
     </div>
-    <div class="form-group col-md-5 mb-4">
-      <label for="cardNumber-element">
-        Credit Card Number
-        <sup>*</sup>
-      </label>
-      <div id="cardNumber-element" class="form-control"></div>
-    </div>
-    <div class="form-group col-md-3 mb-4">
-      <label for="cardCvc-element">
-        Security Code
-        <sup>*</sup>
-      </label>
-      <div id="cardCvc-element" class="form-control"></div>
-    </div>
-    <div class="form-group col-md-3 mb-4">
-      <label for="cardExpiry-element">
-        Expiration Date
-        <sup>*</sup>
-      </label>
-      <div id="cardExpiry-element" class="form-control"></div>
-    </div>
-    <div class="col">
-      <button type="submit" class="btn btn-primary mt-4 min-width-300" x-ref="submitButton">
-        Submit
-      </button>
-    </div>
   </div>
-</div>
+</template>

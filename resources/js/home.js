@@ -32,6 +32,8 @@ const data = (stripePublishableKey) => ({
   stripeElement: null,
   fetchingPaymentIntent: true,
 
+  showPaymentInfo: true,
+
   // can be: ['donation-type', 'personal-info', 'payment-info']
   toggleSecState: 'donation-type',
 
@@ -85,11 +87,12 @@ const data = (stripePublishableKey) => ({
     );
 
     const mountPaymentElement = async () => {
-      const clientSecret = await createPaymentIntent(
+      const resp = await createPaymentIntent(
+        'oneTime',
         this.currency,
         parseFloat(this.donationAmount),
       );
-      this.stripeElement.updateSecretKey(clientSecret);
+      this.stripeElement.updateSecretKey(resp.client_secret);
       this.fetchingPaymentIntent = false;
     };
 
@@ -108,8 +111,15 @@ const data = (stripePublishableKey) => ({
       requestTimeoutId = setTimeout(mountPaymentElement, waitFor);
     };
 
-    this.$watch('donationAmount', queueCreatePaymentIntentRequest);
-    // this.$watch('donationType', (value) => { });
+    this.$watch('donationAmount', () => {
+      if (this.donationType === 'oneTime') {
+        queueCreatePaymentIntentRequest();
+      }
+    });
+
+    this.$watch('donationType', () => {
+      this.showPaymentInfo = this.donationType === 'oneTime';
+    });
 
     mountPaymentElement();
 
@@ -122,7 +132,7 @@ const data = (stripePublishableKey) => ({
   },
 
   resetForm() {
-    this.$refs.capturePayment.reset();
+    this.$refs.paymentForm.reset();
     this.stripeElement.clear();
 
     const { currency, donationType, donationAmount } = initialState();
@@ -141,22 +151,12 @@ const data = (stripePublishableKey) => ({
       case 'payment-info':
         if (forward) this.validateForm(navigateTo);
         this.toggleSecState = navigateTo;
-        this.hideIntroSection(navigateTo !== 'donation-type');
         window.scroll(0, 0);
         break;
 
       default:
         throw `data -- Cannot navigate to ${navigateTo}. Invalid navigation key.`;
     }
-  },
-
-  hideIntroSection(hide) {
-    const selector = 'intro-section';
-    const action = hide ? 'add' : 'remove';
-    this.$refs[selector].classList[action]('d-none', 'd-md-block');
-    console.info(
-      `data: ${selector} ${action === 'remove' ? 'shown' : 'removed'}`,
-    );
   },
 
   async submit() {
@@ -205,8 +205,38 @@ const data = (stripePublishableKey) => ({
 
     console.info('data -- capturing the payment');
   },
+
+  show(selector) {
+    switch (selector) {
+      case 'personal-info':
+        return true;
+      case 'amount-selection':
+        return true;
+      case 'payment-info':
+        // return this.donationType === 'oneTime';
+        return this.showPaymentInfo;
+    }
+  },
+
+  async createAccount() {
+    this.showPaymentInfo = true;
+    this.fetchingPaymentIntent = true;
+    const intent = await createPaymentIntent(
+      'recurring',
+      this.currency,
+      // FIXME: make this dynamic
+      100000,
+    );
+    const secret = intent.latest_invoice.payment_intent.client_secret;
+    console.log('createAccount -- done');
+    this.stripeElement.updateSecretKey(secret);
+    this.fetchingPaymentIntent = false;
+  },
 });
 
-window.Alpine = Alpine;
-document.addEventListener('alpine:init', () => Alpine.data('data', data));
-Alpine.start();
+const main = () => {
+  document.addEventListener('alpine:init', () => Alpine.data('data', data));
+  Alpine.start();
+};
+
+main();

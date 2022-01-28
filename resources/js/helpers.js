@@ -40,7 +40,7 @@ export class PaymentElement {
   }
 }
 
-export async function createPaymentIntent(currency, amount) {
+export async function createPaymentIntent(type, currency, amount) {
   try {
     const intent = await (
       await fetch('/pay', {
@@ -54,12 +54,12 @@ export async function createPaymentIntent(currency, amount) {
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
-        body: JSON.stringify({ currency, amount }),
+        body: JSON.stringify({ type, currency, amount }),
       })
     ).json();
 
     console.info('data -- payment intent created');
-    return intent.client_secret;
+    return intent;
   } catch (e) {
     console.error('data --', e.message);
   }

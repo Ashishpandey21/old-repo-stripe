@@ -28,6 +28,42 @@ export class StripeRepoService {
    * It Will create new intent
    */
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
+    switch (paymentIntent.type) {
+      case 'oneTime':
+        return await this.oneTimePayment(paymentIntent);
+      case 'recurring':
+        return await this.recurringPayment();
+    }
+  }
+
+  private async recurringPayment(): Promise<any> {
+    try {
+      const { id } = await this.createCustomer({
+        address: {
+          line1: 'line1',
+          city: 'foobar',
+          country: 'kontry',
+          postal_code: '1444134',
+          state: 'uk',
+        },
+        email: 'ith@rubicotech.in',
+        name: 'ITH',
+      } as CreateStripeCustomerDto);
+
+      console.log(`-- ${id} customer created`);
+
+      return await this.createUserSubscription({
+        stripe_user_id: id,
+        plan: 'price_1KLiM3SECaNOBWfu1lPCzYAV',
+      });
+    } catch (e) {
+      console.error(e.message);
+    }
+  }
+
+  private async oneTimePayment(
+    paymentIntent: CreatePaymentIntentDto,
+  ): Promise<any> {
     try {
       const intent = await this.stripe.paymentIntents.create({
         amount: this.getLowestDenomination(paymentIntent),
@@ -173,9 +209,11 @@ export class StripeRepoService {
       customer: data.stripe_user_id,
       items: [
         {
-          plan: data.plan,
+          price: data.plan,
         },
       ],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice.payment_intent'],
     });
   }
 }

@@ -1,86 +1,96 @@
-<div class="toggle-sec" x-bind:class="{'d-none d-md-block': toggleSecState !== 'personal-info' }">
-  <h2 class="mb-3">
+<template x-if="show('personal-info')">
+  <div class="toggle-sec" x-bind:class="{'d-none d-md-block': toggleSecState !== 'personal-info' }">
+    <h2 class="mb-3">
+      <button
+          type="button"
+          x-on:click="navigator('donation-type', false)"
+          class="btn btn-no-style responsive-items">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      Personal Info
+    </h2>
+    <div class="row">
+      <div class="form-group col-md-4 mb-4">
+        <label for="salutation">Salutation<sup>*</sup></label>
+        <div class="custom-select-wrap text-end">
+          <select class="custom-select w-100" id="salutation" x-model="salutation">
+            <option value="Mr.">Mr.</option>
+            <option value="Mrs.">Mrs.</option>
+            <option value="Mr. and Mrs.">Mr. and Mrs.</option>
+            <option value="Ms.">Ms.</option>
+            <option value="Miss.">Miss.</option>
+            <option value="Dr.">Dr.</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="firstName">First Name<sup>*</sup></label>
+        <input type="text" class="form-control" id="firstName" x-model="firstName">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="lastName">Last Name<sup>*</sup></label>
+        <input type="text" class="form-control" id="lastName" x-model="lastName">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="email">Email<sup>*</sup></label>
+        <input type="email" class="form-control" id="email" x-model="email">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="email">Phone<sup>*</sup></label>
+        <input type="number" class="form-control" id="phoneNumber" x-model="phoneNumber">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="company">Company</label>
+        <input type="text" class="form-control" id="company" x-model="company">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="country">Country<sup>*</sup></label>
+        <div class="custom-select-wrap text-end">
+          <select id="country" class="custom-select w-100" x-model="country" x-data="{ countries: [] }"
+                                                                             x-init="countries = await (await fetch('https://restcountries.com/v3.1/all')).json()">
+            <option selected disabled>Select</option>
+            <template x-for="country in countries">
+              <option x-bind:value="country.cca2" x-text="country.name.common">
+              </option>
+            </template>
+          </select>
+        </div>
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="city">City<sup>*</sup></label>
+        <input type="text" class="form-control" id="city" x-model="city">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="state">State<sup>*</sup></label>
+        <input type="text" class="form-control" id="state" x-model="state">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="zipPostalCode">Zip/Postal Code<sup>*</sup></label>
+        <input type="text" class="form-control" id="zipPostalCode" x-model="zipPostalCode">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="Address1">Street Address<sup>*</sup></label>
+        <input type="text" class="form-control" id="Address1" x-model="address1">
+      </div>
+      <div class="form-group col-md-4 mb-4">
+        <label for="Address2">Address 2</label>
+        <input type="text" class="form-control" id="Address2" x-model="address2">
+      </div>
+    </div>
+    <template x-if="donationType === 'oneTime'">
+      <button
+          type="button"
+          x-on:click="navigator('payment-info')"
+          class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+        Next
+      </button>
+    </template>
     <button
         type="button"
-        x-on:click="navigator('donation-type', false)"
-        class="btn btn-no-style responsive-items">
-      <i class="fas fa-angle-left"></i>
+        x-on:click="createAccount"
+        x-show="showPaymentInfo === false"
+        class="btn btn-primary mt-4 min-width-300">
+      Create Account
     </button>
-    Personal Info
-  </h2>
-  <div class="row">
-    <div class="form-group col-md-4 mb-4">
-      <label for="salutation">Salutation<sup>*</sup></label>
-      <div class="custom-select-wrap text-end">
-        <select class="custom-select w-100" id="salutation" x-model="salutation">
-          <option value="Mr.">Mr.</option>
-          <option value="Mrs.">Mrs.</option>
-          <option value="Mr. and Mrs.">Mr. and Mrs.</option>
-          <option value="Ms.">Ms.</option>
-          <option value="Miss.">Miss.</option>
-          <option value="Dr.">Dr.</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="firstName">First Name<sup>*</sup></label>
-      <input type="text" class="form-control" id="firstName" x-model="firstName">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="lastName">Last Name<sup>*</sup></label>
-      <input type="text" class="form-control" id="lastName" x-model="lastName">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="email">Email<sup>*</sup></label>
-      <input type="email" class="form-control" id="email" x-model="email">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="email">Phone<sup>*</sup></label>
-      <input type="number" class="form-control" id="phoneNumber" x-model="phoneNumber">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="company">Company</label>
-      <input type="text" class="form-control" id="company" x-model="company">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="country">Country<sup>*</sup></label>
-      <div class="custom-select-wrap text-end">
-        <select id="country" class="custom-select w-100" x-model="country" x-data="{ countries: [] }"
-                                                                           x-init="countries = await (await fetch('https://restcountries.com/v3.1/all')).json()">
-          <option selected disabled>Select</option>
-          <template x-for="country in countries">
-            <option x-bind:value="country.cca2" x-text="country.name.common">
-            </option>
-          </template>
-        </select>
-      </div>
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="city">City<sup>*</sup></label>
-      <input type="text" class="form-control" id="city" x-model="city">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="state">State<sup>*</sup></label>
-      <input type="text" class="form-control" id="state" x-model="state">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="zipPostalCode">Zip/Postal Code<sup>*</sup></label>
-      <input type="text" class="form-control" id="zipPostalCode" x-model="zipPostalCode">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="Address1">Street Address<sup>*</sup></label>
-      <input type="text" class="form-control" id="Address1" x-model="address1">
-    </div>
-    <div class="form-group col-md-4 mb-4">
-      <label for="Address2">Address 2</label>
-      <input type="text" class="form-control" id="Address2" x-model="address2">
-    </div>
   </div>
-  <button
-      type="button"
-      x-on:click="navigator('payment-info')"
-      x-text="donationType === 'monthlyRecurring' ? 'Create Account' : 'Next'"
-      x-bind:class="{'d-block d-md-none': donationType !== 'monthlyRecurring'}"
-      class="btn btn-primary mt-4 min-width-300">
-  </button>
-</div>
+</template>
