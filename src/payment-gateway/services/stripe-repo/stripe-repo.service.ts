@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Stripe } from 'stripe';
@@ -237,12 +236,9 @@ export class StripeRepoService {
       customer: data.stripe_user_id,
       return_url: 'http://localhost:3000/',
     });
-=======
-   * Stripe transactions List
-   */
+  }
   public async transactionsList(params): Promise<any> {
     console.log('transactions params', params);
-    return this.stripe.issuing.transactions.list();
->>>>>>> added transaction list api
+    return this.stripe.charges.list();
   }
 }
