@@ -1,19 +1,13 @@
-<template x-if="showPaymentInfo">
-  <div
-    class="toggle-sec"
-    x-bind:class="{ 'd-none d-md-block': toggleSecState !== 'payment-info' }">
+<template x-data="PaymentInfo" x-if="!hidden">
+  <fieldset class="toggle-sec">
     <h2 class="mb-3">
-      <button
-          type="button"
-          x-on:click="navigator('personal-info', false)"
-          class="btn btn-no-style responsive-items">
+      <button type="button" class="btn btn-no-style responsive-items">
         <i class="fas fa-angle-left"></i>
       </button>
       Payment Info
     </h2>
 
-    <!-- Payment Elements -->
-    <div class="row stripe-form" x-bind:class="fetchingPaymentIntent ? 'loading' : ''">
+    <div class="row stripe-form" :class="fetchingPaymentIntent && 'loading'">
       <div class="spinner-wrapper f-center">
         <div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
@@ -24,27 +18,27 @@
           Credit Card Number
           <sup>*</sup>
         </label>
-        <div id="cardNumber-element" class="form-control"></div>
+        <input id="cardNumber-element" class="form-control"></input>
       </div>
       <div class="form-group col-md-3 mb-4">
         <label for="cardCvc-element">
           Security Code
           <sup>*</sup>
         </label>
-        <div id="cardCvc-element" class="form-control"></div>
+        <input id="cardCvc-element" class="form-control"></input>
       </div>
       <div class="form-group col-md-3 mb-4">
         <label for="cardExpiry-element">
           Expiration Date
           <sup>*</sup>
         </label>
-        <div id="cardExpiry-element" class="form-control"></div>
+        <input id="cardExpiry-element" class="form-control"></input>
       </div>
       <div class="col">
-        <button type="submit" class="btn btn-primary mt-4 min-width-300" x-ref="submitButton">
+        <button type="submit" class="btn btn-primary mt-4 min-width-300">
           Submit
         </button>
       </div>
     </div>
-  </div>
+  </fieldset>
 </template>

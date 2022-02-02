@@ -1,0 +1,179 @@
+<template x-data="PersonalInfo" x-if="!hidden">
+  <fieldset class="toggle-sec" @focusout="validate">
+    <h2 class="mb-3">
+      <button type="button" class="btn btn-no-style responsive-items">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      Personal Info
+    </h2>
+    <div class="row">
+      <div class="form-group col-md-4 mb-4">
+        <label for="salutation">Salutation<sup>*</sup></label>
+        <div class="custom-select-wrap text-end">
+          <select
+              class="custom-select w-100"
+              :class="hasErrors('salutation') && 'is-invalid'"
+              name="salutation"
+              data-rules='["required"]'
+              x-model="form.salutation">
+            <template x-for="salutation in SALUTATIONS">
+              <option :value="salutation" x-text="salutation"></option>
+            </template>
+          </select>
+          <div class="invalid-feedback" x-text="firstError('salutation')"></div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="firstName">First Name<sup>*</sup></label>
+        <input
+            type="text"
+            name="firstName"
+            class="form-control"
+            :class="hasErrors('firstName') && 'is-invalid'"
+            data-rules='["required"]'
+            x-model="form.firstName">
+        <div class="invalid-feedback" x-text="firstError('firstName')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="lastName">Last Name<sup>*</sup></label>
+        <input
+            type="text"
+            name="lastName"
+            class="form-control"
+            :class="hasErrors('lastName') && 'is-invalid'"
+            data-rules='["required"]'
+            x-model="form.lastName">
+        <div class="invalid-feedback" x-text="firstError('lastName')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="email">Email<sup>*</sup></label>
+        <input
+            type="email"
+            name="email"
+            class="form-control"
+            :class="hasErrors('email') && 'is-invalid'"
+            data-rules='["required", "email"]'
+            x-model="form.email.value">
+        <div class="invalid-feedback" x-text="firstError('email')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="email">Phone<sup>*</sup></label>
+        <input
+            type="number"
+            name="phoneNumber"
+            class="form-control"
+            :class="hasErrors('phoneNumber') && 'is-invalid'"
+            data-rules='["required"]'
+            x-model="form.phoneNumber">
+        <div class="invalid-feedback" x-text="firstError('phoneNumber')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="company">Company</label>
+        <input
+            type="text"
+            name="company"
+            class="form-control"
+            :class="hasErrors('company') && 'is-invalid'"
+            data-rules='["optional"]'
+            x-model="form.company">
+        <div class="invalid-feedback" x-text="firstError('company')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="country">Country<sup>*</sup></label>
+        <div class="custom-select-wrap text-end">
+          <select
+              name="country"
+              class="custom-select w-100"
+              :class="hasErrors('country') && 'is-invalid'"
+              data-rules='["required"]'
+              x-model="form.country">
+            <template x-for="country in COUNTRIES">
+              <option :value="country" x-text="country.name">
+              </option>
+            </template>
+          </select>
+          <div class="invalid-feedback" x-text="firstError('country')"></div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="city">City<sup>*</sup></label>
+        <input
+            type="text"
+            name="city"
+            class="form-control"
+            :class="hasErrors('city') && 'is-invalid'"
+            data-rules='["required"]'
+            x-model="form.city">
+        <div class="invalid-feedback" x-text="firstError('city')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="state">State<sup>*</sup></label>
+        <input
+            type="text"
+            name="state"
+            class="form-control"
+            :class="hasErrors('state') && 'is-invalid'"
+            data-rules='["required"]'
+            x-model="form.state">
+        <div class="invalid-feedback" x-text="firstError('state')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="zipPostalCode">Zip/Postal Code<sup>*</sup></label>
+        <input
+            type="text"
+            name="zipPostalCode"
+            class="form-control"
+            :class="hasErrors('zipPostalCode') && 'is-invalid'"
+            data-rules='["required", "number"]'
+            x-model="form.zipPostalCode">
+        <div class="invalid-feedback" x-text="firstError('zipPostalCode')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="Address1">Street Address<sup>*</sup></label>
+        <input
+            type="text"
+            name="address1"
+            class="form-control"
+            :class="hasErrors('address1') && 'is-invalid'"
+            data-rules='["required"]'
+            x-model="form.address1">
+        <div class="invalid-feedback" x-text="firstError('address1')"></div>
+      </div>
+
+      <div class="form-group col-md-4 mb-4">
+        <label for="Address2">Address 2</label>
+        <input
+            type="text"
+            name="address2"
+            class="form-control"
+            :class="hasErrors('address2') && 'is-invalid'"
+            data-rules="['optional']"
+            x-model="form.address2">
+        <div class="invalid-feedback" x-text="firstError('address2')"></div>
+      </div>
+    </div>
+
+    <!-- <template x-if="donationType === 'oneTime'"> -->
+    <button type="button" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+      Next
+    </button>
+    <!-- </template> -->
+    <!-- <button -->
+    <!--     type="button" -->
+    <!--     x-on:click="createAccount" -->
+    <!--     x-show="showPaymentInfo === false" -->
+    <!--     class="btn btn-primary mt-4 min-width-300"> -->
+    <!--   Create Account -->
+    <!-- </button> -->
+  </fieldset>
+</template>

@@ -1,0 +1,113 @@
+<template x-data="AmountSelection" x-if="!hidden">
+  <fieldset class="toggle-sec" @focusout="form.validate">
+    <div class="row mb-3">
+
+      <div class="form-group col-12 mb-3">
+        <h2 class="float-start">Donate Now</h2>
+        <div class="custom-select-wrap text-end">
+          <select class="custom-select min-width-100px" x-model="form.currency">
+            <template x-for="key in Object.keys(CURRENCIES)" :key="key">
+              <option :value="key" x-text="`${key.toUpperCase()} ${CURRENCIES[key]}`">
+              </option>
+            </template>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <div class="row">
+          <div class="col-md-4 col-5">
+            <div class="form-check radio-lg">
+              <input
+                  class="form-check-input"
+                  type="radio"
+                  name="paymentType"
+                  id="oneTime"
+                  value="oneTime"
+                  x-model="form.paymentType">
+              <label class="form-check-label" for="oneTime">
+                One Time
+              </label>
+            </div>
+          </div>
+          <div class="col-md-4 col-7">
+            <div class="form-check radio-lg">
+              <input
+                  class="form-check-input"
+                  type="radio"
+                  name="paymentType"
+                  id="recurring"
+                  value="recurring"
+                  x-model="form.paymentType">
+              <label class="form-check-label" for="recurring">
+                Recurring
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-12">
+        <div class="radio-group row">
+
+          <template x-if="form.paymentType === 'oneTime'">
+            <template x-for="amount in ONE_TIME_PAYMENT_AMOUNTS[form.currency]">
+              <div class="col-6 col-md-2 mb-3">
+                <div class="form-check mb-0 h-100">
+                  <input
+                      class="form-check-input"
+                      type="radio"
+                      name="amount"
+                      :id="`amount-${form.currency}-${amount}`"
+                      :value="amount"
+                      x-model="form.amount">
+                  <label class="form-check-label mb-0 f-center" :for="`amount-${form.currency}-${amount}`">
+                    <span x-text="`${currencySymbol}${amount}`"></span><i class="far fa-check-circle"></i>
+                  </label>
+                </div>
+              </div>
+            </template>
+          </template>
+
+          <template x-if="form.paymentType === 'oneTime'">
+            <div class="input-icon-wrap d-flex col-12 col-md-4 mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text h-100 px-3" x-text="currencySymbol"></span>
+              </div>
+              <input
+                  type="text"
+                  class="form-control"
+                  x-model="form.amount"
+                  placeholder="Other amount"
+                  aria-label="Other amount"
+                  aria-describedby="basic-addon1">
+            </div>
+          </template>
+
+        </div>
+      </div>
+
+      <!-- FIXME: calculate processing fees -->
+      <div class="form-group col-12 mb-3">
+        <div class="form-check checkbox-lg">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">
+            Please add <span x-text="`${currencySymbol}0.00`"></span> to my donation to cover the
+            processing fee.
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <textarea
+          class="form-control resizer-none"
+          placeholder="Comments"
+          x-model="form.comment"
+          rows="3"></textarea>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+      Next
+    </button>
+  </fieldset>
+</template>

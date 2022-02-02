@@ -1,7 +1,7 @@
 {{#extend (layoutName "master") filename="home"}}
 {{#content "head"}}
 {{> head}}
-<script src="/scripts/home.min.js"></script>
+<script defer src="/scripts/home.min.js"></script>
 {{/content}}
 
 {{#content "title"}}
@@ -10,12 +10,11 @@ Donate to SIL
 
 {{#content "mainContent"}}
 {{> header}}
-<main x-data="data('{{stripePublishableKey}}')">
+<!-- <main x-data="data('{{stripePublishableKey}}')"> -->
+<main>
   <section class="donate-sec container-xl pt-5">
     <div class="row">
-      <div
-        class="col-lg-4 toggle-sec"
-        x-bind:class="{'d-none d-md-block': toggleSecState !== 'donation-type'}">
+      <div class="col-lg-4 toggle-sec">
         <img src="images/group@2x.png" class="img-fluid" alt="Group Image">
         <p>SIL International is a faith-based nonprofit organization committed to serving language
           communities worldwide as they build capacity for sustainable language development. SIL does this
@@ -27,12 +26,10 @@ Donate to SIL
       </div>
 
       <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-        <form x-ref="paymentForm" @submit.prevent="submit">
-          <fieldset>
-            {{> form_amount_selection}}
-            {{> form_personal_info}}
-            {{> form_payment_info}}
-          </fieldset>
+        <form @submit.prevent="submit">
+          {{> components/amount_selection}}
+          {{> components/personal_info}}
+          {{> components/payment_info}}
         </form>
       </div>
 

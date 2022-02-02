@@ -1,7 +1,7 @@
 .PHONY: build
 build:
-	yarn build && yarn frontend:prod
+	yarn && yarn frontend:prod && yarn build
 
 .PHONY: watch
 watch: build
-	find resources/ -type f | entr -cr yarn start:prod
+	find resources/views/ -type f | entr -cr yarn start:prod

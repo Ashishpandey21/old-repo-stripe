@@ -64,7 +64,3 @@ export async function createPaymentIntent(type, currency, amount) {
     console.error('data --', e.message);
   }
 }
-
-export function showSuccessModal() {
-  new bootstrap.Modal(document.querySelector('#paymentSuccess')).show();
-}

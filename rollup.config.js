@@ -1,4 +1,6 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import { uglify } from 'rollup-plugin-uglify';
 import copy from 'rollup-plugin-copy';
 import scss from 'rollup-plugin-scss';
 
@@ -10,7 +12,9 @@ export default {
     name: 'home.js',
   },
   plugins: [
-    nodeResolve(),
+    commonjs(),
+    resolve(),
+    uglify(),
     scss({
       output: './public/css/style.min.css',
       outputStyle: 'compressed',
