@@ -1,10 +1,20 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { UserRepoService } from '../../services/user-repo/user-repo.service';
 import { AccessTokenGuard } from '../../../auth/guards/access-token/access-token.guard';
 import { Roles } from '../../constants';
 import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo/stripe-repo.service';
 
+@ApiHeader({
+  name: 'accept',
+  allowEmptyValue: false,
+  required: true,
+  schema: {
+    type: 'string',
+    enum: ['application/json'],
+  },
+})
+@ApiTags('User Management')
 @Controller('users')
 export class UsersController {
   constructor(

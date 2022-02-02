@@ -11,7 +11,6 @@ export class FaqRepoService {
    * @param data
    */
   public createFaq(data: Partial<FaqModel>): Promise<FaqModel> {
-    console.log('====>', data);
     return this.faqModel
       .findOrCreate({
         where: { question: data.question, answer: data.answer },

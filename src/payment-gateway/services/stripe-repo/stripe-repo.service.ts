@@ -238,7 +238,6 @@ export class StripeRepoService {
     });
   }
   public async transactionsList(params): Promise<any> {
-    console.log('transactions params', params);
-    return this.stripe.charges.list();
+    return this.stripe.paymentIntents.list({});
   }
 }
