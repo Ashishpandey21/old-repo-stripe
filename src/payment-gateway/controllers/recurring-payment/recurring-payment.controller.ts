@@ -1,7 +1,12 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserRepoService } from '../../../user/services/user-repo/user-repo.service';
 import { CreateUserDto } from '../../../user/dtos/create-user/create-user.dto';
-import { ApiHeader, ApiOkResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
+import {
+  ApiHeader,
+  ApiOkResponse,
+  ApiProperty,
+  ApiTags,
+} from '@nestjs/swagger';
 import { StripeRepoService } from '../../services/stripe-repo/stripe-repo.service';
 import { UserModel } from '../../../databases/models/user.model';
 
@@ -22,7 +27,7 @@ export class RecurringPaymentController {
     public stripeRepoService: StripeRepoService,
   ) {}
 
-  @ApiOkResponse({ type: UserModel})
+  @ApiOkResponse({ type: UserModel })
   @ApiProperty()
   @Post('user/subscription')
   public async createUserSubscription(
@@ -33,7 +38,7 @@ export class RecurringPaymentController {
       email: data.email,
       password: this.userRepoService.genPassword(),
       stripe_user_id: payment.customer,
-    }
-   return this.userRepoService.createUser(userData);
+    };
+    return this.userRepoService.createUser(userData);
   }
 }

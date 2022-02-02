@@ -32,7 +32,7 @@ export class StripeRepoService {
    * It Will create new intent
    */
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
-        return await this.oneTimePayment(paymentIntent);
+    return await this.oneTimePayment(paymentIntent);
   }
 
   public async recurringPayment(data: CreateUserDto): Promise<any> {
