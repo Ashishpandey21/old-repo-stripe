@@ -40,27 +40,28 @@ export class PaymentElement {
   }
 }
 
-export async function createPaymentIntent(type, currency, amount) {
-  try {
-    const intent = await (
-      await fetch('/pay', {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: JSON.stringify({ type, currency, amount }),
-      })
-    ).json();
-
-    console.info('data -- payment intent created');
-    return intent;
-  } catch (e) {
-    console.error('data --', e.message);
-  }
+export async function createPaymentIntent(form) {
+  // FIXME: implement
+  // try {
+  //   const intent = await (
+  //     await fetch('/pay', {
+  //       method: 'POST',
+  //       mode: 'cors',
+  //       cache: 'no-cache',
+  //       credentials: 'same-origin',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       redirect: 'follow',
+  //       referrerPolicy: 'no-referrer',
+  //       body: JSON.stringify({ type, currency, amount }),
+  //     })
+  //   ).json();
+  //
+  //   console.info('data -- payment intent created');
+  //   return intent;
+  // } catch (e) {
+  //   console.error('data --', e.message);
+  // }
 }
