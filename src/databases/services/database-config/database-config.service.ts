@@ -11,6 +11,7 @@ import { ClientModel } from '../../models/oauth/client.model';
 import { AccessTokenModel } from '../../models/oauth/access-token.model';
 import { RefreshTokenModel } from '../../models/oauth/refresh-token.model';
 import { FaqModel } from '../../models/faq.model';
+import { ForgotPasswordTokenModel } from '../../models/forgot-password-token.model';
 
 @Injectable()
 export class DatabaseConfigService implements SequelizeOptionsFactory {
@@ -36,6 +37,7 @@ export class DatabaseConfigService implements SequelizeOptionsFactory {
       AccessTokenModel,
       RefreshTokenModel,
       FaqModel,
+      ForgotPasswordTokenModel,
     ];
 
     return config;

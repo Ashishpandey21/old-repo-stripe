@@ -8,7 +8,7 @@ import { RandomByteGeneratorService } from '../../../../common/services/random-b
 export class ClientRepoService {
   constructor(
     @InjectModel(ClientModel) public clientModel: typeof ClientModel,
-    private randomByeGenerator: RandomByteGeneratorService,
+    public randomByeGenerator: RandomByteGeneratorService,
   ) {}
 
   /**

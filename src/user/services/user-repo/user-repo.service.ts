@@ -162,4 +162,22 @@ export class UserRepoService {
       );
     }
   }
+
+  /**
+   * Updates password
+   * @param user
+   * @param newPassword
+   * @param transaction
+   */
+  public async changePassword(
+    user: UserModel,
+    newPassword: string,
+    transaction?: Transaction,
+  ): Promise<UserModel> {
+    return user
+      .setAttributes({
+        password: await this.hashEncryptService.createHash(newPassword),
+      })
+      .save({ transaction });
+  }
 }
