@@ -1,5 +1,5 @@
 <template x-data="PersonalInfo" x-if="!hidden">
-  <fieldset class="toggle-sec" @focusout="validate">
+  <fieldset class="toggle-sec" :disabled="disabled">
     <h2 class="mb-3">
       <button type="button" class="btn btn-no-style responsive-items">
         <i class="fas fa-angle-left"></i>
@@ -157,7 +157,7 @@
             name="address2"
             class="form-control"
             :class="hasErrors('address2') && 'is-invalid'"
-            data-rules="['optional']"
+            data-rules='["optional"]'
             x-model="form.address2">
         <div class="invalid-feedback" x-text="firstError('address2')"></div>
       </div>

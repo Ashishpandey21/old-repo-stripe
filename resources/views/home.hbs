@@ -10,7 +10,7 @@ Donate to SIL
 
 {{#content "mainContent"}}
 {{> header}}
-<main x-data="Home('{{stripePublishableKey}}')">
+<main x-data="Home">
   <section class="donate-sec container-xl pt-5">
     <div class="row">
       <div class="col-lg-4 toggle-sec">
@@ -25,13 +25,12 @@ Donate to SIL
       </div>
 
       <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-        <form @submit.prevent="pay">
+        <form @submit.prevent="submit" @focusout="e => validate(e.originalTarget)">
           {{> components/amount_selection}}
           {{> components/personal_info}}
           {{> components/payment_info}}
         </form>
       </div>
-
     </div>
   </section>
 </main>

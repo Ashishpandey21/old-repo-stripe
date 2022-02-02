@@ -1,5 +1,5 @@
 <template x-data="AmountSelection" x-if="!hidden">
-  <fieldset class="toggle-sec" @focusout="form.validate">
+  <fieldset class="toggle-sec" :disabled="disabled">
     <div class="row mb-3">
 
       <div class="form-group col-12 mb-3">
@@ -79,12 +79,12 @@
                   class="form-control"
                   x-model="form.amount"
                   :class="hasErrors('amount') && 'is-invalid'"
-                  data-rules='["required"]'
+                  data-rules='["required", "greaterThan:0"]'
                   placeholder="Other amount"
                   aria-label="Other amount"
                   aria-describedby="basic-addon1">
+              <div class="invalid-feedback" x-text="firstError('amount')"></div>
             </div>
-            <div class="invalid-feedback" x-text="firstError('amount')"></div>
           </template>
 
         </div>

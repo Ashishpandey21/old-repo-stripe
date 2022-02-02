@@ -1,5 +1,15 @@
 import '@kingshott/iodine';
 
+Iodine.addRule('greaterThan', (value, param) => {
+  return parseInt(value) > parseInt(param);
+});
+
+Iodine.setErrorMessages({
+  required: 'This field cannot be empty.',
+  email: 'Invalid email address.',
+  greaterThan: '[FIELD] amount cannot be less than [PARAM].',
+});
+
 const getErrorMessage = (el) => {
   const rules = el.dataset.rules ? JSON.parse(el.dataset.rules) : [];
   const error = Iodine.is(el.value, rules);
@@ -15,8 +25,12 @@ export const makeForm = (form = {}, errors = {}) => ({
   firstError(key) {
     return this.hasErrors(key) ? this.errors[key] : null;
   },
-  validate(ev) {
-    const name = ev.originalTarget.getAttribute('name');
-    this.errors[name] = getErrorMessage(ev.originalTarget);
+  validate(el) {
+    const name = el.getAttribute('name');
+    this.errors[name] = getErrorMessage(el);
+  },
+  validateAll(el) {
+    const fields = el.querySelectorAll('[data-rules]');
+    fields.forEach((field) => this.validate(field));
   },
 });
