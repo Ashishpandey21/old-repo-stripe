@@ -1,7 +1,13 @@
-<template x-data="PersonalInfo" x-if="!hidden">
-  <fieldset class="toggle-sec" :disabled="disabled">
+<template x-data="PersonalInfo" x-if="true">
+  <fieldset
+      class="toggle-sec"
+      :class="$store._.mobileHide.PersonalInfo && 'd-none d-md-block'"
+      :disabled="$store._.disabled.PersonalInfo">
     <h2 class="mb-3">
-      <button type="button" class="btn btn-no-style responsive-items">
+      <button
+          type="button"
+          @click="previous"
+          class="btn btn-no-style responsive-items">
         <i class="fas fa-angle-left"></i>
       </button>
       Personal Info
@@ -163,10 +169,13 @@
       </div>
     </div>
 
-    <!-- <template x-if="donationType === 'oneTime'"> -->
-    <button type="button" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+    <button
+        type="button"
+        @click="next"
+        class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
       Next
     </button>
+
     <!-- </template> -->
     <!-- <button -->
     <!--     type="button" -->

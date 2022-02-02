@@ -6,6 +6,7 @@ import PaymentInfo from './components/payment-info.js';
 
 import { FORM_DEFAULT } from './constants.js';
 import { makeForm } from './libs/form.js';
+import Store from './store.js';
 
 import '../../resources/scss/style.scss';
 
@@ -23,6 +24,7 @@ const Home = () => ({
 
 (() => {
   document.addEventListener('alpine:init', () => {
+    Alpine.store('_', Store);
     Alpine.data('Home', Home);
     Alpine.data('AmountSelection', AmountSelection);
     Alpine.data('PersonalInfo', PersonalInfo);

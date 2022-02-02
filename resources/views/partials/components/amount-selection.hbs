@@ -1,5 +1,8 @@
-<template x-data="AmountSelection" x-if="!hidden">
-  <fieldset class="toggle-sec" :disabled="disabled">
+<template x-data="AmountSelection" x-if="true">
+  <fieldset
+      class="toggle-sec"
+      :class="$store._.mobileHide.AmountSelection && 'd-none d-md-block'"
+      :disabled="$store._.disabled.AmountSelection">
     <div class="row mb-3">
 
       <div class="form-group col-12 mb-3">
@@ -109,7 +112,10 @@
           rows="3"></textarea>
       </div>
     </div>
-    <button type="button" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+    <button
+        type="button"
+        @click="next"
+        class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
       Next
     </button>
   </fieldset>

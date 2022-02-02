@@ -1,10 +1,14 @@
-<template x-data="PaymentInfo('{{stripePublishableKey}}')" x-if="!hidden">
+<template x-data="PaymentInfo('{{stripePublishableKey}}')" x-if="true">
   <fieldset
       class="toggle-sec"
-      :disabled="disabled"
+      :class="$store._.mobileHide.PaymentInfo && 'd-none d-md-block'"
+      :disabled="$store._.disabled.PaymentInfo"
       @createIntent.window="reMountStripeElement">
     <h2 class="mb-3">
-      <button type="button" class="btn btn-no-style responsive-items">
+      <button
+          type="button"
+          @click="previous"
+          class="btn btn-no-style responsive-items">
         <i class="fas fa-angle-left"></i>
       </button>
       Payment Info

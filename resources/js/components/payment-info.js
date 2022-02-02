@@ -3,9 +3,7 @@ import { PaymentElement, createPaymentIntent } from '../libs/payment.js';
 
 export default (stripePublishableKey) => ({
   name: 'PersonalInfo',
-  hidden: false,
   fetchingPaymentIntent: false,
-  disabled: false,
   stripeElement: null,
 
   async init() {
@@ -19,5 +17,10 @@ export default (stripePublishableKey) => ({
     const response = await createPaymentIntent('oneTime', 'usd', 10000);
     this.stripeElement.updateSecretKey(response.client_secret);
     this.fetchingPaymentIntent = false;
+  },
+
+  previous() {
+    this.$store._.hide(['IntroSection', 'AmountSelection', 'PaymentInfo']);
+    this.$store._.show(['PersonalInfo']);
   },
 });
