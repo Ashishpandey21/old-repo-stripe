@@ -28,6 +28,7 @@ import { throwError } from 'rxjs';
 import { UnauthorizedInterceptor } from '../../../globals/interceptors/unauthorized-interceptor/unauthorized.interceptor';
 import { AuthError } from '../../../globals/exceptions/auth-error/auth-error';
 import { constants } from 'os';
+import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo/stripe-repo.service';
 
 @ApiHeader({
   name: 'accept',
@@ -41,7 +42,7 @@ import { constants } from 'os';
 @ApiTags('Login')
 @Controller()
 export class LoginController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private stripeRepoService: StripeRepoService) {}
 
   @UseInterceptors(UnauthorizedInterceptor)
   @ApiOkResponse({ type: UserModel })
@@ -49,7 +50,7 @@ export class LoginController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @UsePipes(ValidationPipe)
-  public async login(@Body() userCredential: LoginPasswordDto): Promise<any> {
+  public async login(@Body() userCredential: LoginPasswordDto, @Res() res: Response,): Promise<any> {
     const loginUser = await this.authService.validateForPassword(
       userCredential.email,
       userCredential.password,
@@ -57,6 +58,7 @@ export class LoginController {
     if (loginUser === null || loginUser.role === 'admin') {
       throw new AuthError();
     }
-    return loginUser;
+    const loginLink = await this.stripeRepoService.stripeUserLogin(loginUser);
+    res.redirect(loginLink.url);
   }
 }

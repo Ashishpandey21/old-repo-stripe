@@ -217,4 +217,11 @@ export class StripeRepoService {
       expand: ['latest_invoice.payment_intent'],
     });
   }
+
+  public async stripeUserLogin(data: UserModel) {
+    return await this.stripe.billingPortal.sessions.create({
+      customer: data.stripe_user_id,
+      return_url: 'http://localhost:3000/',
+    });
+  }
 }
