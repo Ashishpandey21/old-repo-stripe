@@ -29,7 +29,7 @@ export class UniqueEmailValidator implements ValidatorConstraintInterface {
     if (email === undefined || email === null) {
       return true;
     }
-    return   this.userRepo.findByEmail(email).then((result) => !!result);
+    return this.userRepo.findByEmail(email).then((result) => !!result);
   }
 }
 

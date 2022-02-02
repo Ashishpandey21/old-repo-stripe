@@ -42,15 +42,21 @@ import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo
 @ApiTags('Login')
 @Controller()
 export class LoginController {
-  constructor(private authService: AuthService, private stripeRepoService: StripeRepoService) {}
+  constructor(
+    private authService: AuthService,
+    private stripeRepoService: StripeRepoService,
+  ) {}
 
   @UseInterceptors(UnauthorizedInterceptor)
   @ApiOkResponse({ type: UserModel })
   @ApiProperty()
   @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @Post('login/user')
   @UsePipes(ValidationPipe)
-  public async login(@Body() userCredential: LoginPasswordDto, @Res() res: Response,): Promise<any> {
+  public async login(
+    @Body() userCredential: LoginPasswordDto,
+    @Res() res: Response,
+  ): Promise<any> {
     const loginUser = await this.authService.validateForPassword(
       userCredential.email,
       userCredential.password,
@@ -59,6 +65,7 @@ export class LoginController {
       throw new AuthError();
     }
     const loginLink = await this.stripeRepoService.stripeUserLogin(loginUser);
+    console.log(loginLink.url);
     res.redirect(loginLink.url);
   }
 }

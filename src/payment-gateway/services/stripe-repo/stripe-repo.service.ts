@@ -8,6 +8,8 @@ import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
 import { CreateStripeCustomerDto } from '../../dtos/create-stripe-customer/create-stripe-customer.dto';
 import { StripeConfig } from 'src/environment/interfaces/environment-types.interface';
 import { UserModel } from '../../../databases/models/user.model';
+import { UserRepoService } from '../../../user/services/user-repo/user-repo.service';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class StripeRepoService {
@@ -219,6 +221,21 @@ export class StripeRepoService {
   }
 
   public async stripeUserLogin(data: UserModel) {
+    const configuration = await this.stripe.billingPortal.configurations.create(
+      {
+        business_profile: {
+          privacy_policy_url:
+            'https://staging.donation.languagetechnology.org/forgot-password',
+          terms_of_service_url:
+            'https://staging.donation.languagetechnology.org/forgot-password',
+        },
+        features: {
+          invoice_history: {
+            enabled: true,
+          },
+        },
+      },
+    );
     return await this.stripe.billingPortal.sessions.create({
       customer: data.stripe_user_id,
       return_url: 'http://localhost:3000/',

@@ -33,7 +33,7 @@ export class AuthService {
     if (!user) {
       throw new AuthError();
     }
-    if(user.role === 'admin'){
+    if (user.role === 'admin') {
       throw new AuthError();
     }
     if (!(await this.hashEncryptService.checkHash(password, user.password))) {
