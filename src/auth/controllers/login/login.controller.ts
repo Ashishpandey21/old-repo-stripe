@@ -47,7 +47,7 @@ export class LoginController {
     private stripeRepoService: StripeRepoService,
   ) {}
 
-  @UseInterceptors(UnauthorizedInterceptor)
+  //@UseInterceptors(UnauthorizedInterceptor)
   @ApiOkResponse({ type: UserModel })
   @ApiProperty()
   @HttpCode(HttpStatus.OK)
@@ -62,6 +62,7 @@ export class LoginController {
       userCredential.password,
     );
     if (loginUser === null || loginUser.role === 'admin') {
+      console.log('yes')
       throw new AuthError();
     }
     const loginLink = await this.stripeRepoService.stripeUserLogin(loginUser);
