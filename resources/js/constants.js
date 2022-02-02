@@ -64,6 +64,7 @@ export const PERSONAL_INFO_FORM_DEFAULT = {
 
 export const FORM_DEFAULT = {
   ...AMOUNT_SELECTION_FORM_DEFAULT,
+  ...PERSONAL_INFO_FORM_DEFAULT,
 };
 
 export const COUNTRIES = countries;

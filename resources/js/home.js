@@ -1,11 +1,22 @@
 import Alpine from 'alpinejs';
-// import { loadStripe } from '@stripe/stripe-js';
 
 import AmountSelection from './components/amount-selection.js';
 import PersonalInfo from './components/personal-info.js';
 import PaymentInfo from './components/payment-info.js';
 
+import { FORM_DEFAULT } from './constants.js';
+import { makeForm } from './libs/form.js';
+
 import '../../resources/scss/style.scss';
+
+const Home = (stripePublishableKey) => ({
+  stripePublishableKey,
+  ...makeForm(FORM_DEFAULT),
+
+  pay() {
+    console.log(this.form);
+  },
+});
 
 // const data = (stripePublishableKey) => ({
 //   stripeElement: null,
@@ -15,35 +26,6 @@ import '../../resources/scss/style.scss';
 //
 //   // can be: ['donation-type', 'personal-info', 'payment-info']
 //   toggleSecState: 'donation-type',
-//
-//   get donationAmounts() {
-//     const amounts = {
-//       usd: ['25', '50', '100', '200', '500'],
-//       aud: ['30', '60', '100', '200', '500'],
-//       eur: ['15', '40', '80', '150', '500'],
-//       gbp: ['15', '30', '60', '100', '500'],
-//       krw: ['20', '50', '100', '200', '500'],
-//       nzd: ['50', '100', '200', '500', '800'],
-//       thb: ['500', '1000', '2000', '5000', '10000'],
-//       jpy: ['2000', '5000', '10000', '20000', '500000'],
-//       brl: ['80', '200', '400', '800', '1000'],
-//       cad: ['20', '70', '100', '200', '500'],
-//     }[this.currency];
-//
-//     return this.donationType === 'oneTime' ? amounts.slice(0, -1) : amounts;
-//   },
-//
-//   get fullName() {
-//     return `${this.salutation} ${this.firstName} ${this.lastName}`;
-//   },
-//
-//   get processingFees() {
-//     return '0.00';
-//   },
-//
-//   get currencySymbol() {
-//     return this.currencies[this.currency];
-//   },
 //
 //   async init() {
 //     this.stripeElement = new PaymentElement(
@@ -200,12 +182,11 @@ import '../../resources/scss/style.scss';
 
 (() => {
   document.addEventListener('alpine:init', () => {
-    // Alpine.store('store', {});
-    // Alpine.data('data', data);
-
+    Alpine.data('Home', Home);
     Alpine.data('AmountSelection', AmountSelection);
     Alpine.data('PersonalInfo', PersonalInfo);
     Alpine.data('PaymentInfo', PaymentInfo);
   });
+
   Alpine.start();
 })();

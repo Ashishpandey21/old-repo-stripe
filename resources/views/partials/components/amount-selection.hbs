@@ -78,10 +78,13 @@
                   type="text"
                   class="form-control"
                   x-model="form.amount"
+                  :class="hasErrors('amount') && 'is-invalid'"
+                  data-rules='["required"]'
                   placeholder="Other amount"
                   aria-label="Other amount"
                   aria-describedby="basic-addon1">
             </div>
+            <div class="invalid-feedback" x-text="firstError('amount')"></div>
           </template>
 
         </div>
