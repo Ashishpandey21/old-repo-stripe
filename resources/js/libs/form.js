@@ -28,9 +28,18 @@ export const makeForm = (form = {}, errors = {}) => ({
   validate(el) {
     const name = el.getAttribute('name');
     this.errors[name] = getErrorMessage(el);
+    return this.errors[name] === null;
   },
   validateAll(el) {
+    let status = true;
     const fields = el.querySelectorAll('[data-rules]');
-    fields.forEach((field) => this.validate(field));
+
+    fields.forEach((field) => {
+      if (this.validate(field) === false) {
+        status = false;
+      }
+    });
+
+    return status;
   },
 });

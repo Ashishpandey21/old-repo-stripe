@@ -5,12 +5,6 @@ export class CreatePaymentIntentDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @IsIn(['oneTime', 'recurring'])
-  public type: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   public currency: string;
 
   @ApiProperty()

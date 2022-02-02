@@ -99,8 +99,9 @@
               :class="hasErrors('country') && 'is-invalid'"
               data-rules='["required"]'
               x-model="form.country">
-            <template x-for="country in COUNTRIES">
-              <option :value="country" x-text="country.name">
+            <option value="" selected>Select...</option>
+            <template x-for="(country, key) of COUNTRIES">
+              <option :value="key" x-text="country.name">
               </option>
             </template>
           </select>
@@ -139,7 +140,7 @@
             name="zipPostalCode"
             class="form-control"
             :class="hasErrors('zipPostalCode') && 'is-invalid'"
-            data-rules='["required", "number"]'
+            data-rules='["required"]'
             x-model="form.zipPostalCode">
         <div class="invalid-feedback" x-text="firstError('zipPostalCode')"></div>
       </div>

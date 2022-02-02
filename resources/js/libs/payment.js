@@ -1,3 +1,5 @@
+import { postRequest } from './request.js';
+
 export class PaymentElement {
   constructor(stripe) {
     this.stripe = stripe;
@@ -40,28 +42,59 @@ export class PaymentElement {
   }
 }
 
+async function recurringPaymentIntent(form) {
+  try {
+    const intent = await postRequest('/pay', {
+      currency: form.currency,
+      amount: parseFloat(form.amount),
+    });
+    console.info('recurringPaymentIntent -- payment intent created');
+    return intent;
+  } catch (e) {
+    console.error('recurringPaymentIntent --', e.message);
+  }
+}
+
+async function oneTimePaymentIntent(form) {
+  try {
+    const intent = await postRequest('/pay', {
+      currency: form.currency,
+      amount: parseFloat(form.amount),
+    });
+    console.info('oneTimePaymentIntent -- payment intent created');
+    return intent;
+  } catch (e) {
+    console.error('oneTimePaymentIntent --', e.message);
+  }
+}
+
 export async function createPaymentIntent(form) {
-  // FIXME: implement
-  // try {
-  //   const intent = await (
-  //     await fetch('/pay', {
-  //       method: 'POST',
-  //       mode: 'cors',
-  //       cache: 'no-cache',
-  //       credentials: 'same-origin',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       redirect: 'follow',
-  //       referrerPolicy: 'no-referrer',
-  //       body: JSON.stringify({ type, currency, amount }),
-  //     })
-  //   ).json();
-  //
-  //   console.info('data -- payment intent created');
-  //   return intent;
-  // } catch (e) {
-  //   console.error('data --', e.message);
-  // }
+  switch (form.paymentType) {
+    case 'oneTime':
+      return await oneTimePaymentIntent(form);
+      break;
+    case 'recurring':
+      return await recurringPaymentIntent(form);
+      break;
+  }
+}
+
+export function createConfirmCardPayload(card, form) {
+  return {
+    payment_method: {
+      card: card,
+      billing_details: {
+        address: {
+          city: form.city,
+          country: form.country,
+          line1: form.address1,
+          postal_code: form.zipPostalCode,
+          state: form.state,
+        },
+        email: form.email,
+        name: `${form.salutation} ${form.firstName} ${form.lastName}`,
+        phone: form.phoneNumber,
+      },
+    },
+  };
 }

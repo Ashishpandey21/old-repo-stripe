@@ -27,7 +27,10 @@ Donate to SIL
       </div>
 
       <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-        <form @submit.prevent="submit" @focusout="e => validate(e.originalTarget)">
+        <form
+            x-ref="form"
+            @submit.prevent="submit"
+            @focusout="e => validate(e.originalTarget)">
           {{> components/amount_selection}}
           {{> components/personal_info}}
           {{> components/payment_info}}
