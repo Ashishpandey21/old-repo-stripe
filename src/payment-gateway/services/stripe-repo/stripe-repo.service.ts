@@ -5,6 +5,8 @@ import { CARD, STRIPE_CLIENT } from '../../constants';
 import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confirm-payment-intent.dto';
 import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-payment-intent.dto';
 import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
+import { CreateStripeCustomerDto } from '../../dtos/create-stripe-customer/create-stripe-customer.dto';
+import { StripeConfig } from 'src/environment/interfaces/environment-types.interface';
 
 @Injectable()
 export class StripeRepoService {
@@ -13,10 +15,55 @@ export class StripeRepoService {
     private readonly configService: ConfigService,
   ) {}
 
+  public async getConfig(): Promise<any> {
+    const prices = await this.stripe.prices.list();
+
+    return {
+      publishableKey: this.configService.get<StripeConfig>('publishableKey'),
+      prices: prices.data,
+    };
+  }
+
   /**
    * It Will create new intent
    */
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
+    switch (paymentIntent.type) {
+      case 'oneTime':
+        return await this.oneTimePayment(paymentIntent);
+      case 'recurring':
+        return await this.recurringPayment();
+    }
+  }
+
+  private async recurringPayment(): Promise<any> {
+    try {
+      const { id } = await this.createCustomer({
+        address: {
+          line1: 'line1',
+          city: 'foobar',
+          country: 'kontry',
+          postal_code: '1444134',
+          state: 'uk',
+        },
+        email: 'ith@rubicotech.in',
+        name: 'ITH',
+      } as CreateStripeCustomerDto);
+
+      console.log(`-- ${id} customer created`);
+
+      return await this.createUserSubscription({
+        stripe_user_id: id,
+        plan: 'price_1KLiM3SECaNOBWfu1lPCzYAV',
+      });
+    } catch (e) {
+      console.error(e.message);
+    }
+  }
+
+  private async oneTimePayment(
+    paymentIntent: CreatePaymentIntentDto,
+  ): Promise<any> {
     try {
       const intent = await this.stripe.paymentIntents.create({
         amount: this.getLowestDenomination(paymentIntent),
@@ -133,5 +180,40 @@ export class StripeRepoService {
    */
   public async customersDetail(customerId: string): Promise<any> {
     return this.stripe.customers.retrieve(customerId);
+  }
+
+  /**
+   * It will create new stripe customer
+   * @param customerData
+   */
+  public createCustomer(customerData: CreateStripeCustomerDto): Promise<any> {
+    return this.stripe.customers.create({
+      address: {
+        line1: customerData.address.line1,
+        city: customerData.address.city,
+        country: customerData.address.country,
+        postal_code: customerData.address.postal_code,
+        state: customerData.address.state,
+      },
+      email: customerData.email,
+      name: customerData.name,
+    });
+  }
+
+  /**
+   * Create Customer Subscription
+   * @param data
+   */
+  public async createUserSubscription(data: any): Promise<any> {
+    return this.stripe.subscriptions.create({
+      customer: data.stripe_user_id,
+      items: [
+        {
+          price: data.plan,
+        },
+      ],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice.payment_intent'],
+    });
   }
 }

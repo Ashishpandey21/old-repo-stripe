@@ -1,7 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePaymentIntentDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  @IsIn(['oneTime', 'recurring'])
+  public type: string;
+
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

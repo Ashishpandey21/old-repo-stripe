@@ -17,6 +17,8 @@ import { AccessTokenRepoService } from './services/oauth/access-token-repo/acces
 import { RefreshTokenRepoService } from './services/oauth/refresh-token-repo/refresh-token-repo.service';
 import { AdminOauthController } from './controllers/admin-oauth/admin-oauth.controller';
 import { AdminAccessTokenService } from './strategies/admin-access-token/admin-access-token.service';
+import { StripeRepoService } from '../payment-gateway/services/stripe-repo/stripe-repo.service';
+import { UserCreatedMailRepoService } from '../user/services/user-created-mail-repo/user-created-mail-repo.service';
 
 @Global()
 @Module({
@@ -40,6 +42,8 @@ import { AdminAccessTokenService } from './strategies/admin-access-token/admin-a
     AccessTokenRepoService,
     RefreshTokenRepoService,
     AdminAccessTokenService,
+    StripeRepoService,
+    UserCreatedMailRepoService,
   ],
   controllers: [LoginController, OauthController, AdminOauthController],
   exports: [AuthService, HashEncryptService],

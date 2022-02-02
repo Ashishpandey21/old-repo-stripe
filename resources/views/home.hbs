@@ -1,10 +1,7 @@
 {{#extend (layoutName "master") filename="home"}}
 {{#content "head"}}
 {{> head}}
-<script src="https://js.stripe.com/v3/"></script>
-<script defer src="/scripts/payment-form.js"></script>
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/mattkingshott/iodine/dist/iodine.min.umd.js" defer></script>
+<script defer src="/scripts/home.min.js"></script>
 {{/content}}
 
 {{#content "title"}}
@@ -13,6 +10,7 @@ Donate to SIL
 
 {{#content "mainContent"}}
 {{> header}}
+<!-- <main x-data="data('{{stripePublishableKey}}')"> -->
 <main>
   <section class="donate-sec container-xl pt-5">
     <div class="row">
@@ -26,34 +24,18 @@ Donate to SIL
           spiritual. SIL Language Technology supports these activities by developing software, fonts and
           keyboards</p>
       </div>
-      {{> donation_form}}
+
+      <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
+        <form @submit.prevent="submit">
+          {{> components/amount_selection}}
+          {{> components/personal_info}}
+          {{> components/payment_info}}
+        </form>
+      </div>
+
     </div>
   </section>
 </main>
-<div class="modal fade custom-modal text-center" id="paymentSuccess" aria-hidden="true"
-  aria-labelledby="paymentSuccessLabel" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered justify-content-center">
-    <div class="modal-content d-none d-md-block">
-      <div class="modal-body">
-        <button type="button" class="btn-close f-center" data-bs-dismiss="modal" aria-label="Close">
-          <i class="fas fa-times"></i>
-        </button>
-        <div class="img-wrap f-center mx-auto">
-          <img src="/images/starts.svg" alt="Payment Successful Image">
-          <i class="fas fa-check-circle fa-3x"></i>
-        </div>
-        <h4 class="mt-4">Payment Successful</h4>
-        <button class="btn btn-blue mt-4" data-bs-dismiss="modal" aria-label="Close">Done</button>
-      </div>
-    </div>
-    <div class="modal-content d-flex d-md-none content-mobile">
-      <img src="/images/Group 90.svg" alt="Payment Successful Image">
-      <div class="position-relative text-white">
-        <h3 class="mt-4">Payment Successful</h3>
-        <button class="btn mt-5 btn-white" data-bs-dismiss="modal" aria-label="Close">Home</button>
-      </div>
-    </div>
-  </div>
-</div>
+{{> modals}}
 {{/content}}
 {{/extend}}
