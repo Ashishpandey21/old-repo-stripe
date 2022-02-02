@@ -28,6 +28,7 @@ import { MethodChangeMiddleware } from './helpers/middlewares/method-change/meth
 import { ModelBootstrapModule } from './databases/model-bootstrap/model-bootstrap.module';
 import { FaqsModule } from './faqs/faqs.module';
 import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
+import { PasswordManagerModule } from './password-manager/password-manager.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
       delimiter: '.',
     }),
     FaqsModule,
+    PasswordManagerModule,
   ],
   controllers: [AppController],
   providers: [

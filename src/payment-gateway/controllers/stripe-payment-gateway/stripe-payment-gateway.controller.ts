@@ -18,7 +18,7 @@ import { ConfirmPaymentIntentDto } from '../../dtos/confirm-payment-intent/confi
   version: ['1'],
 })
 export class StripePaymentGatewayController {
-  constructor(private stripeRepoService: StripeRepoService) {}
+  constructor(public stripeRepoService: StripeRepoService) {}
 
   @ApiProperty()
   @Post('config')

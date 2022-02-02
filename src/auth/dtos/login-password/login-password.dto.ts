@@ -1,10 +1,15 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsUniqueEmail } from '../../../user/validators/is-unique-email/is-unique-email.validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginPasswordDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
+  @IsUniqueEmail()
   public email: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   public password: string;

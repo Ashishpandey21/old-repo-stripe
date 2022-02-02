@@ -1,10 +1,20 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { UserRepoService } from '../../services/user-repo/user-repo.service';
 import { AccessTokenGuard } from '../../../auth/guards/access-token/access-token.guard';
 import { Roles } from '../../constants';
 import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo/stripe-repo.service';
 
+@ApiHeader({
+  name: 'accept',
+  allowEmptyValue: false,
+  required: true,
+  schema: {
+    type: 'string',
+    enum: ['application/json'],
+  },
+})
+@ApiTags('User Management')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -22,7 +32,6 @@ export class UsersController {
   @ApiProperty()
   @Get('/list')
   public getCustomersList(@Query() query): Promise<any> {
-    console.log('getCustomersList: ', query.limit);
     return this.stripeRepoService.customersList(query);
   }
 
@@ -31,5 +40,12 @@ export class UsersController {
   @Get('/detail/:id')
   public getCustomerDetail(@Param() params): Promise<any> {
     return this.stripeRepoService.customersDetail(params.id);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiProperty()
+  @Get('/transactions')
+  public getTransactionsList(@Query() query): Promise<any> {
+    return this.stripeRepoService.transactionsList(query);
   }
 }

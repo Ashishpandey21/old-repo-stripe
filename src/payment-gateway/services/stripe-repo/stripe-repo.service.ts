@@ -7,10 +7,14 @@ import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-
 import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
 import { CreateStripeCustomerDto } from '../../dtos/create-stripe-customer/create-stripe-customer.dto';
 import { StripeConfig } from 'src/environment/interfaces/environment-types.interface';
+import { UserModel } from '../../../databases/models/user.model';
+import { CreateUserDto } from '../../../user/dtos/create-user/create-user.dto';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class StripeRepoService {
   constructor(
+    @InjectModel(UserModel) public userModel: typeof UserModel,
     @Inject(STRIPE_CLIENT) private stripe: Stripe,
     private readonly configService: ConfigService,
   ) {}
@@ -28,33 +32,27 @@ export class StripeRepoService {
    * It Will create new intent
    */
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
-    switch (paymentIntent.type) {
-      case 'oneTime':
         return await this.oneTimePayment(paymentIntent);
-      case 'recurring':
-        return await this.recurringPayment();
-    }
   }
 
-  private async recurringPayment(): Promise<any> {
+  public async recurringPayment(data: CreateUserDto): Promise<any> {
     try {
       const { id } = await this.createCustomer({
         address: {
-          line1: 'line1',
-          city: 'foobar',
-          country: 'kontry',
-          postal_code: '1444134',
-          state: 'uk',
+          line1: data.address.line1,
+          city: data.address.city,
+          country: data.address.country,
+          postal_code: data.address.postal_code,
+          state: data.address.state,
         },
-        email: 'ith@rubicotech.in',
-        name: 'ITH',
+        email: data.email,
+        name: data.name,
       } as CreateStripeCustomerDto);
 
       console.log(`-- ${id} customer created`);
-
       return await this.createUserSubscription({
         stripe_user_id: id,
-        plan: 'price_1KLiM3SECaNOBWfu1lPCzYAV',
+        plan: data.amount_id,
       });
     } catch (e) {
       console.error(e.message);
@@ -215,5 +213,30 @@ export class StripeRepoService {
       payment_behavior: 'default_incomplete',
       expand: ['latest_invoice.payment_intent'],
     });
+  }
+
+  public async stripeUserLogin(data: UserModel) {
+    const configuration = await this.stripe.billingPortal.configurations.create(
+      {
+        business_profile: {
+          privacy_policy_url:
+            'https://staging.donation.languagetechnology.org/forgot-password',
+          terms_of_service_url:
+            'https://staging.donation.languagetechnology.org/forgot-password',
+        },
+        features: {
+          invoice_history: {
+            enabled: true,
+          },
+        },
+      },
+    );
+    return await this.stripe.billingPortal.sessions.create({
+      customer: data.stripe_user_id,
+      return_url: 'http://localhost:3000/',
+    });
+  }
+  public async transactionsList(params): Promise<any> {
+    return this.stripe.paymentIntents.list({});
   }
 }

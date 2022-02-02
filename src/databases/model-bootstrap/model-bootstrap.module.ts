@@ -5,6 +5,7 @@ import { ClientModel } from '../models/oauth/client.model';
 import { AccessTokenModel } from '../models/oauth/access-token.model';
 import { RefreshTokenModel } from '../models/oauth/refresh-token.model';
 import { FaqModel } from '../models/faq.model';
+import { ForgotPasswordTokenModel } from '../models/forgot-password-token.model';
 
 const models = SequelizeModule.forFeature([
   UserModel,
@@ -12,6 +13,7 @@ const models = SequelizeModule.forFeature([
   AccessTokenModel,
   RefreshTokenModel,
   FaqModel,
+  ForgotPasswordTokenModel,
 ]);
 
 @Global()
