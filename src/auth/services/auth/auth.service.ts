@@ -8,6 +8,7 @@ import { AccessTokenRepoService } from '../oauth/access-token-repo/access-token-
 import { RefreshTokenRepoService } from '../oauth/refresh-token-repo/refresh-token-repo.service';
 import { RefreshTokenModel } from '../../../databases/models/oauth/refresh-token.model';
 import { Roles } from '../../../user/constants';
+import { AuthError } from '../../../globals/exceptions/auth-error/auth-error';
 
 @Injectable()
 export class AuthService {
@@ -30,13 +31,14 @@ export class AuthService {
   ): Promise<UserModel | null> {
     const user = await this.userRepo.findByEmail(email);
     if (!user) {
-      return null;
+      throw new AuthError();
     }
-
+    if(user.role === 'admin'){
+      throw new AuthError();
+    }
     if (!(await this.hashEncryptService.checkHash(password, user.password))) {
-      return null;
+      throw new AuthError();
     }
-
     return user;
   }
 

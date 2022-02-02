@@ -1,58 +1,62 @@
-import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserModel } from '../../../databases/models/user.model';
 import { LoginWebGuard } from '../../guards/login-web/login-web.guard';
 import { AuthService } from '../../services/auth/auth.service';
 import { IntendManagerService } from '../../../session-manager/services/intend-manager/intend-manager.service';
-import { ApiExcludeController } from '@nestjs/swagger';
+import {
+  ApiExcludeController,
+  ApiHeader,
+  ApiOkResponse,
+  ApiProperty,
+  ApiTags,
+} from '@nestjs/swagger';
+import { LoginPasswordDto } from '../../dtos/login-password/login-password.dto';
+import { throwError } from 'rxjs';
+import { UnauthorizedInterceptor } from '../../../globals/interceptors/unauthorized-interceptor/unauthorized.interceptor';
+import { AuthError } from '../../../globals/exceptions/auth-error/auth-error';
+import { constants } from 'os';
 
-@ApiExcludeController()
-@Controller('auth')
+@ApiHeader({
+  name: 'accept',
+  allowEmptyValue: false,
+  required: true,
+  schema: {
+    type: 'string',
+    enum: ['application/json'],
+  },
+})
+@ApiTags('Login')
+@Controller()
 export class LoginController {
-  /**
-   * Default redirect url
-   * @protected
-   */
-  static DefaultRedirectUrl = '/profile';
+  constructor(private authService: AuthService) {}
 
-  constructor(
-    private authService: AuthService,
-    private intendManager: IntendManagerService,
-  ) {}
-
-  @UseGuards(LoginWebGuard)
+  @UseInterceptors(UnauthorizedInterceptor)
+  @ApiOkResponse({ type: UserModel })
+  @ApiProperty()
+  @HttpCode(HttpStatus.OK)
   @Post('login')
-  public async login(@Req() request: Request, @Res() response: Response) {
-    await this.authService.mapSessionWithUser(
-      request.session as any,
-      request.user as UserModel,
+  @UsePipes(ValidationPipe)
+  public async login(@Body() userCredential: LoginPasswordDto): Promise<any> {
+    const loginUser = await this.authService.validateForPassword(
+      userCredential.email,
+      userCredential.password,
     );
-
-    const redirectUrl = this.getRedirectUrl(request);
-    return new Promise<void>((res, rej) => {
-      request.session.save((err) => {
-        if (!!err) {
-          rej(err);
-          return;
-        }
-        response.redirect(redirectUrl);
-        res();
-      });
-    });
-  }
-
-  /**
-   * Returns the redirect url
-   * @param request
-   */
-  public getRedirectUrl(request: Request): string {
-    const intendUrl = this.intendManager.getUrl(request);
-
-    if (!!intendUrl) {
-      this.intendManager.setUrl(request, null);
-      return intendUrl;
+    if (loginUser === null || loginUser.role === 'admin') {
+      throw new AuthError();
     }
-
-    return LoginController.DefaultRedirectUrl;
+    return loginUser;
   }
 }

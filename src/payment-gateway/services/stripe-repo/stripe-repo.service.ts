@@ -7,6 +7,7 @@ import { CreatePaymentIntentDto } from '../../dtos/create-payment-intent/create-
 import { CurrencyEnum } from '../../enums/currency-enum/currency.enum';
 import { CreateStripeCustomerDto } from '../../dtos/create-stripe-customer/create-stripe-customer.dto';
 import { StripeConfig } from 'src/environment/interfaces/environment-types.interface';
+import { UserModel } from '../../../databases/models/user.model';
 
 @Injectable()
 export class StripeRepoService {
