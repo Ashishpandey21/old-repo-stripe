@@ -14,4 +14,8 @@ export default () => ({
     this.$store._.show(['IntroSection', 'AmountSelection']);
     this.$store._.hide(['PaymentInfo', 'PersonalInfo']);
   },
+
+  createAccount() {
+    this.next();
+  },
 });

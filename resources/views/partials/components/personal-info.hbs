@@ -169,20 +169,22 @@
       </div>
     </div>
 
-    <button
-        type="button"
-        @click="next"
-        class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
-      Next
-    </button>
+    <template x-if="form.paymentType === 'oneTime'">
+      <button
+          type="button"
+          @click="next"
+          class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+        Next
+      </button>
+    </template>
 
-    <!-- </template> -->
-    <!-- <button -->
-    <!--     type="button" -->
-    <!--     x-on:click="createAccount" -->
-    <!--     x-show="showPaymentInfo === false" -->
-    <!--     class="btn btn-primary mt-4 min-width-300"> -->
-    <!--   Create Account -->
-    <!-- </button> -->
+    <template x-if="form.paymentType === 'recurring'">
+      <button
+        type="button"
+        x-on:click="createAccount"
+        class="btn btn-primary mt-4 min-width-300">
+        Create Account
+      </button>
+    </template>
   </fieldset>
 </template>

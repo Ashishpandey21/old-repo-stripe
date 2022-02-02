@@ -12,6 +12,8 @@ export default {
     PaymentInfo: false,
   },
 
+  accountCreated: false,
+
   hide(components) {
     components.forEach((component) => {
       if (!component in this.mobileHide) throw `Invalid component ${component}`;
