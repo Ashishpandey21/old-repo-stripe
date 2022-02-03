@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Render,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Render, Req, Res, UseGuards, } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserModel } from '../../../databases/models/user.model';
 import { LoginWebGuard } from '../../guards/login-web/login-web.guard';
@@ -28,27 +20,14 @@ export class LoginController {
     private intendManager: IntendManagerService,
     private stripeRepoService: StripeRepoService,
     private urlGenerator: UrlGeneratorService,
-  ) {}
+  ) {
+  }
 
   @UseGuards(LoginWebGuard)
   @Post('oauth/login')
   public async login(@Req() request: Request, @Res() response: Response) {
-    await this.authService.mapSessionWithUser(
-      request.session as any,
-      request.user as UserModel,
-    );
-
     const redirectUrl = this.getRedirectUrl(request);
-    return new Promise<void>((res, rej) => {
-      request.session.save(async (err) => {
-        if (!!err) {
-          rej(err);
-          return;
-        }
-        response.redirect(await redirectUrl);
-        res();
-      });
-    });
+    response.redirect(await redirectUrl);
   }
 
   /**

@@ -33,7 +33,10 @@ export class RecurringPaymentController {
       password: this.userRepoService.genPassword(),
       stripe_user_id: payment.customer,
     };
-    this.logger.debug(`Customer Created with credential${JSON.stringify(userData)}`, 'Recurring Controller');
+    this.logger.debug(
+      `Customer Created with credential: ${JSON.stringify(userData)}`,
+      'RecurringPaymentController',
+    );
     const user = await this.userRepoService.createUser(userData);
     return { user: user, payment };
   }
