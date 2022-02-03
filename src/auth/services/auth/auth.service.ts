@@ -31,21 +31,13 @@ export class AuthService {
   ): Promise<UserModel | null> {
     const user = await this.userRepo.findByEmail(email);
     if (!user) {
-      throw new AuthError();
-    }
-    if (user.role === 'admin') {
-      throw new AuthError();
+      return null;
     }
 
-    const hashCheck = await this.hashEncryptService.checkHash(
-      password,
-      user.password,
-    );
-    console.log('has', hashCheck);
-    if (!hashCheck) {
-      console.log('pas');
-      throw new AuthError();
+    if (!(await this.hashEncryptService.checkHash(password, user.password))) {
+      return null;
     }
+
     return user;
   }
 
