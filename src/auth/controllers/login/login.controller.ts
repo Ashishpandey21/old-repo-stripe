@@ -12,11 +12,9 @@ import { UserModel } from '../../../databases/models/user.model';
 import { LoginWebGuard } from '../../guards/login-web/login-web.guard';
 import { AuthService } from '../../services/auth/auth.service';
 import { IntendManagerService } from '../../../session-manager/services/intend-manager/intend-manager.service';
-import { ApiExcludeController } from '@nestjs/swagger';
 import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo/stripe-repo.service';
 import { UrlGeneratorService } from 'nestjs-url-generator';
 
-@ApiExcludeController()
 @Controller()
 export class LoginController {
   /**
@@ -64,7 +62,6 @@ export class LoginController {
       this.intendManager.setUrl(request, null);
       return intendUrl;
     }
-
     return (
       await this.stripeRepoService.stripeUserLogin(request.user as UserModel)
     ).url;
