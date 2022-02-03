@@ -1,5 +1,8 @@
-<template x-data="AmountSelection" x-if="!hidden">
-  <fieldset class="toggle-sec" @focusout="form.validate">
+<template x-data="AmountSelection" x-if="true">
+  <fieldset
+      class="toggle-sec"
+      :class="$store._.mobileHide.AmountSelection && 'd-none d-md-block'"
+      :disabled="$store._.disabled.AmountSelection">
     <div class="row mb-3">
 
       <div class="form-group col-12 mb-3">
@@ -40,7 +43,7 @@
                   value="recurring"
                   x-model="form.paymentType">
               <label class="form-check-label" for="recurring">
-                Recurring
+                Monthly Recurring
               </label>
             </div>
           </div>
@@ -49,6 +52,25 @@
 
       <div class="form-group col-12">
         <div class="radio-group row">
+
+          <template x-if="form.paymentType === 'recurring'">
+            <template x-for="(amount, id) in RECURRING_PAYMENT_AMOUNTS">
+              <div class="col-6 col-md-2 mb-3">
+                <div class="form-check mb-0 h-100">
+                  <input
+                      class="form-check-input"
+                      type="radio"
+                      name="amountId"
+                      :id="id"
+                      :value="id"
+                      x-model="form.amountId">
+                  <label class="form-check-label mb-0 f-center" :for="id">
+                    <span x-text="`${currencySymbol}${amount}`"></span><i class="far fa-check-circle"></i>
+                  </label>
+                </div>
+              </div>
+            </template>
+          </template>
 
           <template x-if="form.paymentType === 'oneTime'">
             <template x-for="amount in ONE_TIME_PAYMENT_AMOUNTS[form.currency]">
@@ -78,9 +100,12 @@
                   type="text"
                   class="form-control"
                   x-model="form.amount"
+                  :class="hasErrors('amount') && 'is-invalid'"
+                  data-rules='["required", "greaterThan:0"]'
                   placeholder="Other amount"
                   aria-label="Other amount"
                   aria-describedby="basic-addon1">
+              <div class="invalid-feedback" x-text="firstError('amount')"></div>
             </div>
           </template>
 
@@ -106,7 +131,10 @@
           rows="3"></textarea>
       </div>
     </div>
-    <button type="button" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+    <button
+        type="button"
+        @click="next"
+        class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
       Next
     </button>
   </fieldset>

@@ -32,7 +32,7 @@ export class StripeRepoService {
    * It Will create new intent
    */
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
-        return await this.oneTimePayment(paymentIntent);
+    return await this.oneTimePayment(paymentIntent);
   }
 
   public async recurringPayment(data: CreateUserDto): Promise<any> {
@@ -52,7 +52,7 @@ export class StripeRepoService {
       console.log(`-- ${id} customer created`);
       return await this.createUserSubscription({
         stripe_user_id: id,
-        plan: data.amount_id,
+        plan: data.amountId,
       });
     } catch (e) {
       console.error(e.message);
@@ -67,10 +67,7 @@ export class StripeRepoService {
         amount: this.getLowestDenomination(paymentIntent),
         currency: paymentIntent.currency,
         payment_method_types: [CARD],
-        description: 'Donation to SIL',
-        // description: `Donation to ${this.configService.get<SystemConfig>(
-        //   'appName',
-        // )}`,
+        description: 'Donation to SIL Language Technology',
       });
       return intent;
     } catch (e) {
@@ -181,7 +178,6 @@ export class StripeRepoService {
   }
 
   /**
-<<<<<<< HEAD
    * It will create new stripe customer
    * @param customerData
    */

@@ -41,5 +41,5 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  public amount_id: string;
+  public amountId: string;
 }

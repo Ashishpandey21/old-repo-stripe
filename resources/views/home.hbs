@@ -10,29 +10,32 @@ Donate to SIL
 
 {{#content "mainContent"}}
 {{> header}}
-<!-- <main x-data="data('{{stripePublishableKey}}')"> -->
-<main>
+<main x-data="Home('{{stripePublishableKey}}')">
   <section class="donate-sec container-xl pt-5">
     <div class="row">
-      <div class="col-lg-4 toggle-sec">
+      <div
+          :class="$store._.mobileHide.IntroSection && 'd-none d-md-block'"
+          class="col-lg-4 toggle-sec">
         <img src="images/group@2x.png" class="img-fluid" alt="Group Image">
         <p>SIL International is a faith-based nonprofit organization committed to serving language
-          communities worldwide as they build capacity for sustainable language development. SIL does this
-          primarily through research, translation, training and materials development. SIL works alongside
-          ethnolinguistic communities and their partners as they discover how language development
-          addresses the challenging areas of their daily lives—social, cultural, political, economic and
-          spiritual. SIL Language Technology supports these activities by developing software, fonts and
-          keyboards</p>
+        communities worldwide as they build capacity for sustainable language development. SIL does this
+        primarily through research, translation, training and materials development. SIL works alongside
+        ethnolinguistic communities and their partners as they discover how language development
+        addresses the challenging areas of their daily lives—social, cultural, political, economic and
+        spiritual. SIL Language Technology supports these activities by developing software, fonts and
+        keyboards</p>
       </div>
 
       <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
-        <form @submit.prevent="submit">
+        <form
+            x-ref="form"
+            @submit.prevent="submit"
+            @focusout="e => validate(e.originalTarget)">
           {{> components/amount_selection}}
           {{> components/personal_info}}
           {{> components/payment_info}}
         </form>
       </div>
-
     </div>
   </section>
 </main>

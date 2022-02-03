@@ -1,7 +1,13 @@
-<template x-data="PersonalInfo" x-if="!hidden">
-  <fieldset class="toggle-sec" @focusout="validate">
+<template x-data="PersonalInfo" x-if="true">
+  <fieldset
+      class="toggle-sec"
+      :class="$store._.mobileHide.PersonalInfo && 'd-none d-md-block'"
+      :disabled="$store._.disabled.PersonalInfo">
     <h2 class="mb-3">
-      <button type="button" class="btn btn-no-style responsive-items">
+      <button
+          type="button"
+          @click="previous"
+          class="btn btn-no-style responsive-items">
         <i class="fas fa-angle-left"></i>
       </button>
       Personal Info
@@ -56,7 +62,7 @@
             class="form-control"
             :class="hasErrors('email') && 'is-invalid'"
             data-rules='["required", "email"]'
-            x-model="form.email.value">
+            x-model="form.email">
         <div class="invalid-feedback" x-text="firstError('email')"></div>
       </div>
 
@@ -93,8 +99,9 @@
               :class="hasErrors('country') && 'is-invalid'"
               data-rules='["required"]'
               x-model="form.country">
-            <template x-for="country in COUNTRIES">
-              <option :value="country" x-text="country.name">
+            <option value="" selected>Select...</option>
+            <template x-for="(country, key) of COUNTRIES">
+              <option :value="key" x-text="country.name">
               </option>
             </template>
           </select>
@@ -133,7 +140,7 @@
             name="zipPostalCode"
             class="form-control"
             :class="hasErrors('zipPostalCode') && 'is-invalid'"
-            data-rules='["required", "number"]'
+            data-rules='["required"]'
             x-model="form.zipPostalCode">
         <div class="invalid-feedback" x-text="firstError('zipPostalCode')"></div>
       </div>
@@ -157,23 +164,29 @@
             name="address2"
             class="form-control"
             :class="hasErrors('address2') && 'is-invalid'"
-            data-rules="['optional']"
+            data-rules='["optional"]'
             x-model="form.address2">
         <div class="invalid-feedback" x-text="firstError('address2')"></div>
       </div>
     </div>
 
-    <!-- <template x-if="donationType === 'oneTime'"> -->
-    <button type="button" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
-      Next
-    </button>
-    <!-- </template> -->
-    <!-- <button -->
-    <!--     type="button" -->
-    <!--     x-on:click="createAccount" -->
-    <!--     x-show="showPaymentInfo === false" -->
-    <!--     class="btn btn-primary mt-4 min-width-300"> -->
-    <!--   Create Account -->
-    <!-- </button> -->
+    <template x-if="form.paymentType === 'oneTime'">
+      <button
+          type="button"
+          @click="next"
+          class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+        Next
+      </button>
+    </template>
+
+    <template x-if="form.paymentType === 'recurring' && !$store._.customerCreated">
+      <button
+        type="button"
+        x-ref="createAccountBtn"
+        x-on:click="createAccount"
+        class="btn btn-primary my-4 min-width-300">
+        Create Account
+      </button>
+    </template>
   </fieldset>
 </template>

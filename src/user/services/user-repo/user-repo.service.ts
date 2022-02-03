@@ -92,7 +92,7 @@ export class UserRepoService {
         })
         .then((result) => result);
       const user = await this.findByEmail(data.email);
-      this.userCreatedEmail.sendMail(user.email, password);
+      // this.userCreatedEmail.sendMail(user.email, password);
       return user;
     } catch (error) {
       throw new HttpException(

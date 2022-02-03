@@ -62,7 +62,7 @@ export class LoginController {
       userCredential.password,
     );
     if (loginUser === null || loginUser.role === 'admin') {
-      console.log('yes')
+      console.log('yes');
       throw new AuthError();
     }
     const loginLink = await this.stripeRepoService.stripeUserLogin(loginUser);

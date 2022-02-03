@@ -20,7 +20,7 @@ import { UserCreatedMailRepoService } from '../user/services/user-created-mail-r
     MapTokenPipe,
     ClientRepoService,
     StripeRepoService,
-    HashEncryptService
+    HashEncryptService,
   ],
 })
 export class PasswordManagerModule {}

@@ -1,16 +1,18 @@
-import { makeForm } from '../libs/form.js';
-import {
-  COUNTRIES,
-  SALUTATIONS,
-  PERSONAL_INFO_FORM_DEFAULT,
-} from '../constants.js';
+import { COUNTRIES, SALUTATIONS } from '../constants.js';
+import { createPaymentIntent } from '../libs/payment';
 
 export default () => ({
   name: 'PersonalInfo',
-  hidden: false,
-
-  ...makeForm(PERSONAL_INFO_FORM_DEFAULT),
-
   COUNTRIES,
   SALUTATIONS,
+
+  next() {
+    this.$store._.hide(['IntroSection', 'AmountSelection', 'PersonalInfo']);
+    this.$store._.show(['PaymentInfo']);
+  },
+
+  previous() {
+    this.$store._.show(['IntroSection', 'AmountSelection']);
+    this.$store._.hide(['PaymentInfo', 'PersonalInfo']);
+  },
 });
