@@ -62,7 +62,7 @@
             class="form-control"
             :class="hasErrors('email') && 'is-invalid'"
             data-rules='["required", "email"]'
-            x-model="form.email.value">
+            x-model="form.email">
         <div class="invalid-feedback" x-text="firstError('email')"></div>
       </div>
 
@@ -179,9 +179,10 @@
       </button>
     </template>
 
-    <template x-if="form.paymentType === 'recurring'">
+    <template x-if="form.paymentType === 'recurring' && !$store._.customerCreated">
       <button
         type="button"
+        x-ref="createAccountBtn"
         x-on:click="createAccount"
         class="btn btn-primary my-4 min-width-300">
         Create Account

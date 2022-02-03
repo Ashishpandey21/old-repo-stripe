@@ -40,7 +40,10 @@ const Home = (stripePublishableKey) => ({
     const queueCreatePaymentIntentRequest = () => {
       this.fetchingPaymentIntent = true;
       if (!!requestTimeoutId) clearTimeout(requestTimeoutId);
-      requestTimeoutId = setTimeout(() => this.mountPaymentElement(), waitFor);
+      requestTimeoutId = setTimeout(
+        async () => await this.mountPaymentElement(),
+        waitFor,
+      );
     };
 
     this.$watch('form.amount', () => {
@@ -53,6 +56,7 @@ const Home = (stripePublishableKey) => ({
   },
 
   async mountPaymentElement() {
+    this.fetchingPaymentIntent = true;
     const response = await createPaymentIntent(this.form);
     this.stripeElement.updateSecretKey(response.client_secret);
     this.fetchingPaymentIntent = false;
@@ -87,12 +91,26 @@ const Home = (stripePublishableKey) => ({
     console.info('Home -- capturing the payment');
   },
 
+  async createAccount() {
+    this.$refs.createAccountBtn.disabled = true;
+    this.$store._.disable(['AmountSelection', 'PersonalInfo']);
+
+    if (this.validateAll(this.$refs.form)) {
+      this.$store._.hide(['IntroSection', 'AmountSelection', 'PersonalInfo']);
+      this.$store._.show(['PaymentInfo']);
+      this.$store._.customerCreated = true;
+      await this.mountPaymentElement();
+    }
+  },
+
   reset() {
     this.$refs.form.reset();
     this.form = Object.assign(FORM_DEFAULT, {});
     this.stripeElement.clear();
+    this.$store._.customerCreated = false;
     this.$store._.show(['IntroSection', 'AmountSelection']);
     this.$store._.hide(['PersonalInfo', 'PaymentInfo']);
+    this.$store._.enable(['AmountSelection', 'PersonalInfo', 'PaymentInfo']);
   },
 });
 

@@ -11,6 +11,6 @@ export default () => ({
       return true;
     }
 
-    return this.$store._.accountCreated;
+    return this.$store._.customerCreated;
   },
 });

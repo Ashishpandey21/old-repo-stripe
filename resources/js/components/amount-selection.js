@@ -1,9 +1,15 @@
-import { CURRENCIES, ONE_TIME_PAYMENT_AMOUNTS } from '../constants.js';
+import {
+  CURRENCIES,
+  ONE_TIME_PAYMENT_AMOUNTS,
+  RECURRING_PAYMENT_AMOUNTS,
+} from '../constants.js';
 
 export default () => ({
   name: 'AmountSelection',
+
   CURRENCIES,
   ONE_TIME_PAYMENT_AMOUNTS,
+  RECURRING_PAYMENT_AMOUNTS,
 
   get currencySymbol() {
     return CURRENCIES[this.form.currency];

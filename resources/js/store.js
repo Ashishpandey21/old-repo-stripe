@@ -12,7 +12,7 @@ export default {
     PaymentInfo: false,
   },
 
-  accountCreated: false,
+  customerCreated: false,
 
   hide(components) {
     components.forEach((component) => {

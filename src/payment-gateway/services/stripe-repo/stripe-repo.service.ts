@@ -52,7 +52,7 @@ export class StripeRepoService {
       console.log(`-- ${id} customer created`);
       return await this.createUserSubscription({
         stripe_user_id: id,
-        plan: data.amount_id,
+        plan: data.amountId,
       });
     } catch (e) {
       console.error(e.message);
@@ -67,10 +67,7 @@ export class StripeRepoService {
         amount: this.getLowestDenomination(paymentIntent),
         currency: paymentIntent.currency,
         payment_method_types: [CARD],
-        description: 'Donation to SIL',
-        // description: `Donation to ${this.configService.get<SystemConfig>(
-        //   'appName',
-        // )}`,
+        description: 'Donation to SIL Language Technology',
       });
       return intent;
     } catch (e) {

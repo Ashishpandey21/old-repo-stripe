@@ -44,12 +44,25 @@ export class PaymentElement {
 
 async function recurringPaymentIntent(form) {
   try {
-    const intent = await postRequest('/pay', {
+    const response = await postRequest('/user/subscription', {
+      address: {
+        line1: form.address1,
+        line2: form.address2,
+        city: form.city,
+        country: form.country,
+        postal_code: form.zipPostalCode,
+        state: form.stat,
+      },
+      email: form.email,
+      name: `${form.salutation} ${form.firstName} ${form.lastName}`,
+      first_name: form.firstName,
+      last_name: form.lastName,
+      phone: form.phoneNumber,
       currency: form.currency,
-      amount: parseFloat(form.amount),
+      amountId: form.amountId,
     });
     console.info('recurringPaymentIntent -- payment intent created');
-    return intent;
+    return response.payment.latest_invoice.payment_intent;
   } catch (e) {
     console.error('recurringPaymentIntent --', e.message);
   }

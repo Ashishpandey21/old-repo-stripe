@@ -1,4 +1,5 @@
 import { COUNTRIES, SALUTATIONS } from '../constants.js';
+import { createPaymentIntent } from '../libs/payment';
 
 export default () => ({
   name: 'PersonalInfo',
@@ -13,9 +14,5 @@ export default () => ({
   previous() {
     this.$store._.show(['IntroSection', 'AmountSelection']);
     this.$store._.hide(['PaymentInfo', 'PersonalInfo']);
-  },
-
-  createAccount() {
-    this.next();
   },
 });
