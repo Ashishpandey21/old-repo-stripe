@@ -3,10 +3,14 @@ import { MailerOptions, MailerOptionsFactory } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { MailConfig } from '../../../environment/interfaces/environment-types.interface';
 import MailMessage = require('nodemailer/lib/mailer/mail-message');
+import { SendgridTransportService } from '../../send-grid/services/sendgrid-transport/sendgrid-transport.service';
 
 @Injectable()
 export class MailConfigService implements MailerOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private sendgridMailer: SendgridTransportService,
+  ) {}
 
   /**
    * @inheritDoc
@@ -29,6 +33,9 @@ export class MailConfigService implements MailerOptionsFactory {
             pass: this.configService.get('MAIL_PASSWORD'),
           },
         };
+        break;
+      case 'sendgrid':
+        mailConfig.transport = this.sendgridMailer.transport();
         break;
 
       case 'log':

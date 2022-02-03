@@ -4,5 +4,6 @@ import { LoggingService } from '../../services/logging/logging.service';
 
 @Module({
   providers: [SendgridTransportService, LoggingService],
+  exports: [SendgridTransportService],
 })
 export class SendGridModule {}

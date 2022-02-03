@@ -36,7 +36,7 @@ export interface DatabaseConfig {
 }
 
 export interface MailConfig extends MailerOptions {
-  driver: 'log' | 'smtp';
+  driver: 'log' | 'smtp' | 'sendgrid';
 }
 
 export interface SessionConfig extends Partial<SessionOptions> {

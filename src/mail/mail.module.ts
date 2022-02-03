@@ -10,7 +10,7 @@ import { SendGridModule } from './send-grid/send-grid.module';
   imports: [
     MailerModule.forRootAsync({
       useClass: MailConfigService,
-      imports: [ConfigModule],
+      imports: [ConfigModule, SendGridModule],
     }),
     SendGridModule,
   ],
