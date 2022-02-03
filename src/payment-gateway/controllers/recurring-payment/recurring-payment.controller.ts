@@ -32,7 +32,7 @@ export class RecurringPaymentController {
   @Post('user/subscription')
   public async createUserSubscription(
     @Body() data: CreateUserDto,
-    @Res() res: Response
+    @Res() res,
   ): Promise<any> {
     const payment = await this.stripeRepoService.recurringPayment(data);
     const userData = {
@@ -45,7 +45,5 @@ export class RecurringPaymentController {
       user: await this.userRepoService.createUser(userData),
       payment,
     };
-
-    res.redirect()
   }
 }

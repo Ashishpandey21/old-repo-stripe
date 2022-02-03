@@ -50,10 +50,11 @@ export class StripeRepoService {
       } as CreateStripeCustomerDto);
 
       console.log(`-- ${id} customer created`);
-      return await this.createUserSubscription({
+      const sub =  await this.createUserSubscription({
         stripe_user_id: id,
         plan: data.amountId,
       });
+      return sub;
     } catch (e) {
       console.error(e.message);
     }

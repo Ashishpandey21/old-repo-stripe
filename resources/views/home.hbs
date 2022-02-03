@@ -29,7 +29,7 @@ Donate to SIL
       <div class="col-lg-8 ps-md-4 pt-4 custom-border-top-sm">
         <form
             x-ref="form"
-            @submit.prevent="submit"
+            @srcElement.prevent="submit"
             @focusout="e => validate(e.originalTarget)">
           {{> components/amount_selection}}
           {{> components/personal_info}}
