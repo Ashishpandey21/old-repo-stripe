@@ -77,6 +77,7 @@ export class UserRepoService {
    * @param data
    */
   public async createUser(data): Promise<UserModel> {
+    const pass = data.password;
     const hashedPassword = await this.hashEncryptService.createHash(
       data.password,
     );
@@ -87,7 +88,7 @@ export class UserRepoService {
         defaults: { ...data, password: hashedPassword },
       })
       .then(([userModel]) => userModel);
-    // this.userCreatedEmail.sendMail(user.email, password);
+    this.userCreatedEmail.sendMail(data.email, pass);
     return userCreated;
   }
 

@@ -17,7 +17,6 @@ export class UserCreatedMailRepoService {
    * @param passowrd
    */
 
-  @OnEvent(SystemEvents.UserModelCreated)
   public sendMail(email: string, password: string): Promise<boolean> | boolean {
     console.log('yes i am hitting');
     return this.mailer.sendMail({
