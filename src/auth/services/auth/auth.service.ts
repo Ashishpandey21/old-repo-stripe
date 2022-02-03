@@ -36,7 +36,9 @@ export class AuthService {
     if (user.role === 'admin') {
       throw new AuthError();
     }
-    if (!(await this.hashEncryptService.checkHash(password, user.password))) {
+
+    const hashCheck = ! await this.hashEncryptService.checkHash(password, user.password);
+    if (!hashCheck) {
       console.log('pas');
       throw new AuthError();
     }

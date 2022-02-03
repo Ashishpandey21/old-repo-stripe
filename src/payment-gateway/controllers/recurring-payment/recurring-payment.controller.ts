@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { UserRepoService } from '../../../user/services/user-repo/user-repo.service';
 import { CreateUserDto } from '../../../user/dtos/create-user/create-user.dto';
 import {
@@ -32,6 +32,7 @@ export class RecurringPaymentController {
   @Post('user/subscription')
   public async createUserSubscription(
     @Body() data: CreateUserDto,
+    @Res() res: Response
   ): Promise<any> {
     const payment = await this.stripeRepoService.recurringPayment(data);
     const userData = {
@@ -39,9 +40,12 @@ export class RecurringPaymentController {
       password: this.userRepoService.genPassword(),
       stripe_user_id: payment.customer,
     };
+    console.log(userData)
     return {
       user: await this.userRepoService.createUser(userData),
       payment,
     };
+
+    res.redirect()
   }
 }

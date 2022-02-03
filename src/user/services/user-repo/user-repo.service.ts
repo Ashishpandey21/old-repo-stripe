@@ -83,6 +83,7 @@ export class UserRepoService {
   public async createUser(data): Promise<UserModel> {
     const password = this.genPassword();
     const hashedPassword = await this.hashEncryptService.createHash(password);
+    console.log(hashedPassword)
     try {
       data.password = hashedPassword;
       const userCreated = await this.userModel

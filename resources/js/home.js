@@ -100,6 +100,9 @@ const Home = (stripePublishableKey) => ({
       this.$store._.show(['PaymentInfo']);
       this.$store._.customerCreated = true;
       await this.mountPaymentElement();
+    } else {
+      this.$refs.createAccountBtn.disabled = false;
+      this.$store._.enable(['AmountSelection', 'PersonalInfo', 'PaymentInfo']);
     }
 
     if (this.$refs.createAccountBtn) {
