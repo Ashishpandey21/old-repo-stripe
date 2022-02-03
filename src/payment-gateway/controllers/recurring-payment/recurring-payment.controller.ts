@@ -1,14 +1,8 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
 import { UserRepoService } from '../../../user/services/user-repo/user-repo.service';
 import { CreateUserDto } from '../../../user/dtos/create-user/create-user.dto';
-import {
-  ApiHeader,
-  ApiOkResponse,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { StripeRepoService } from '../../services/stripe-repo/stripe-repo.service';
-import { UserModel } from '../../../databases/models/user.model';
 
 @ApiHeader({
   name: 'accept',
@@ -25,6 +19,7 @@ export class RecurringPaymentController {
   constructor(
     public userRepoService: UserRepoService,
     public stripeRepoService: StripeRepoService,
+    private logger: Logger,
   ) {}
 
   @ApiProperty()
@@ -38,6 +33,7 @@ export class RecurringPaymentController {
       password: this.userRepoService.genPassword(),
       stripe_user_id: payment.customer,
     };
+    this.logger.debug(`Customer Created with credential${userData}`, 'Recurring Controller');
     const user = await this.userRepoService.createUser(userData);
     return { user: user, payment };
   }
