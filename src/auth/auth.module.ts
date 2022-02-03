@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Logger, Module } from '@nestjs/common';
 import { AuthService } from './services/auth/auth.service';
 import { HashEncryptService } from './services/hash-encrypt/hash-encrypt.service';
 import { SessionStrategyService } from './strategies/session-strategy/session-strategy.service';
@@ -44,6 +44,7 @@ import { UserCreatedMailRepoService } from '../user/services/user-created-mail-r
     AdminAccessTokenService,
     StripeRepoService,
     UserCreatedMailRepoService,
+    Logger,
   ],
   controllers: [LoginController, OauthController, AdminOauthController],
   exports: [AuthService, HashEncryptService],

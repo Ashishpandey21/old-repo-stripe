@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UserRepoService } from './services/user-repo/user-repo.service';
 import { UsersController } from './controllers/users/users.controller';
 import { RegisterController } from './controllers/register/register.controller';
@@ -15,6 +15,7 @@ import { MailService } from '../mail/services/mail/mail.service';
     CheckEmailExistValidator,
     UserCreatedMailRepoService,
     MailService,
+    Logger
   ],
   controllers: [RegisterController, UsersController],
 })

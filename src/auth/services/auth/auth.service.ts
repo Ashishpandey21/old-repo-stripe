@@ -37,7 +37,11 @@ export class AuthService {
       throw new AuthError();
     }
 
-    const hashCheck = ! await this.hashEncryptService.checkHash(password, user.password);
+    const hashCheck = await this.hashEncryptService.checkHash(
+      password,
+      user.password,
+    );
+    console.log('has', hashCheck);
     if (!hashCheck) {
       console.log('pas');
       throw new AuthError();

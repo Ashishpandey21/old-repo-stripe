@@ -27,12 +27,10 @@ export class RecurringPaymentController {
     public stripeRepoService: StripeRepoService,
   ) {}
 
-  @ApiOkResponse({ type: UserModel })
   @ApiProperty()
   @Post('user/subscription')
   public async createUserSubscription(
     @Body() data: CreateUserDto,
-    @Res() res,
   ): Promise<any> {
     const payment = await this.stripeRepoService.recurringPayment(data);
     const userData = {
@@ -40,10 +38,7 @@ export class RecurringPaymentController {
       password: this.userRepoService.genPassword(),
       stripe_user_id: payment.customer,
     };
-    console.log(userData)
-    return {
-      user: await this.userRepoService.createUser(userData),
-      payment,
-    };
+    const user = await this.userRepoService.createUser(userData);
+    return { user: user, payment };
   }
 }

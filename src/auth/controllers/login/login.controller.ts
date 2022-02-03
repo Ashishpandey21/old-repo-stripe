@@ -1,72 +1,83 @@
 import {
-  Body,
   Controller,
-  HttpCode,
-  HttpStatus,
+  Get,
   Post,
+  Render,
   Req,
   Res,
   UseGuards,
-  UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserModel } from '../../../databases/models/user.model';
 import { LoginWebGuard } from '../../guards/login-web/login-web.guard';
 import { AuthService } from '../../services/auth/auth.service';
 import { IntendManagerService } from '../../../session-manager/services/intend-manager/intend-manager.service';
-import {
-  ApiExcludeController,
-  ApiHeader,
-  ApiOkResponse,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
-import { LoginPasswordDto } from '../../dtos/login-password/login-password.dto';
-import { throwError } from 'rxjs';
-import { UnauthorizedInterceptor } from '../../../globals/interceptors/unauthorized-interceptor/unauthorized.interceptor';
-import { AuthError } from '../../../globals/exceptions/auth-error/auth-error';
-import { constants } from 'os';
+import { ApiExcludeController } from '@nestjs/swagger';
 import { StripeRepoService } from '../../../payment-gateway/services/stripe-repo/stripe-repo.service';
+import { UrlGeneratorService } from 'nestjs-url-generator';
 
-@ApiHeader({
-  name: 'accept',
-  allowEmptyValue: false,
-  required: true,
-  schema: {
-    type: 'string',
-    enum: ['application/json'],
-  },
-})
-@ApiTags('Login')
+@ApiExcludeController()
 @Controller()
 export class LoginController {
+  /**
+   * Default redirect url
+   * @protected
+   */
+  static DefaultRedirectUrl = '/profile';
+
   constructor(
     private authService: AuthService,
+    private intendManager: IntendManagerService,
     private stripeRepoService: StripeRepoService,
+    private urlGenerator: UrlGeneratorService,
   ) {}
 
-  //@UseInterceptors(UnauthorizedInterceptor)
-  @ApiOkResponse({ type: UserModel })
-  @ApiProperty()
-  @HttpCode(HttpStatus.OK)
-  @Post('login/user')
-  @UsePipes(ValidationPipe)
-  public async login(
-    @Body() userCredential: LoginPasswordDto,
-    @Res() res: Response,
-  ): Promise<any> {
-    const loginUser = await this.authService.validateForPassword(
-      userCredential.email,
-      userCredential.password,
+  @UseGuards(LoginWebGuard)
+  @Post('oauth/login')
+  public async login(@Req() request: Request, @Res() response: Response) {
+    await this.authService.mapSessionWithUser(
+      request.session as any,
+      request.user as UserModel,
     );
-    if (loginUser === null || loginUser.role === 'admin') {
-      console.log('yes');
-      throw new AuthError();
+
+    const redirectUrl = this.getRedirectUrl(request);
+    return new Promise<void>((res, rej) => {
+      request.session.save(async (err) => {
+        if (!!err) {
+          rej(err);
+          return;
+        }
+        response.redirect(await redirectUrl);
+        res();
+      });
+    });
+  }
+
+  /**
+   * Returns the redirect url
+   * @param request
+   */
+  public async getRedirectUrl(request: Request): Promise<string> {
+    const intendUrl = this.intendManager.getUrl(request);
+
+    if (!!intendUrl) {
+      this.intendManager.setUrl(request, null);
+      return intendUrl;
     }
-    const loginLink = await this.stripeRepoService.stripeUserLogin(loginUser);
-    console.log(loginLink.url);
-    res.redirect(loginLink.url);
+
+    return (
+      await this.stripeRepoService.stripeUserLogin(request.user as UserModel)
+    ).url;
+  }
+
+  @Get('login')
+  @Render('login')
+  getLogin() {
+    return {
+      loginUrl: this.urlGenerator.generateUrlFromController({
+        controller: LoginController,
+        controllerMethod: LoginController.prototype.login,
+      }),
+    };
   }
 }

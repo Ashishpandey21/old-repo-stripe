@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Stripe } from 'stripe';
 import { CARD, STRIPE_CLIENT } from '../../constants';
@@ -17,6 +17,7 @@ export class StripeRepoService {
     @InjectModel(UserModel) public userModel: typeof UserModel,
     @Inject(STRIPE_CLIENT) private stripe: Stripe,
     private readonly configService: ConfigService,
+    private logger: Logger,
   ) {}
 
   public async getConfig(): Promise<any> {
@@ -49,12 +50,11 @@ export class StripeRepoService {
         name: data.name,
       } as CreateStripeCustomerDto);
 
-      console.log(`-- ${id} customer created`);
-      const sub =  await this.createUserSubscription({
+      this.logger.debug(`Customer Created with id ${id}`, 'StripeRepoService');
+      return await this.createUserSubscription({
         stripe_user_id: id,
         plan: data.amountId,
       });
-      return sub;
     } catch (e) {
       console.error(e.message);
     }

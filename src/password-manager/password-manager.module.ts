@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ForgotPasswordController } from './controllers/forgot-password/forgot-password.controller';
 import { ResetPasswordController } from './controllers/reset-password/reset-password.controller';
 import { ForgotPasswordRepoService } from './services/forgot-password-repo/forgot-password-repo.service';
@@ -21,6 +21,7 @@ import { UserCreatedMailRepoService } from '../user/services/user-created-mail-r
     ClientRepoService,
     StripeRepoService,
     HashEncryptService,
+    Logger,
   ],
 })
 export class PasswordManagerModule {}

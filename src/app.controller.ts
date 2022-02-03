@@ -19,18 +19,6 @@ export class AppController {
     };
   }
 
-  @Get('login')
-  @Render('login')
-  getLogin() {
-    return {};
-  }
-
-  @Post('login')
-  makeLogin() {
-    // redirect
-    return {};
-  }
-
   @Get('forgot-password')
   @Render('forgot-password')
   getForgotPassword() {
