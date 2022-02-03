@@ -64,7 +64,7 @@ const Home = (stripePublishableKey) => ({
 
   async submit(ev) {
     this.$refs.submitButton.disabled = true;
-    if (this.validateAll(ev.originalTarget)) {
+    if (this.validateAll(ev.srcElement)) {
       await this.capturePayment();
     }
     this.$refs.submitButton.disabled = false;

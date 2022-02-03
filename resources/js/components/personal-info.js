@@ -7,8 +7,10 @@ export default () => ({
   SALUTATIONS,
 
   next() {
-    this.$store._.hide(['IntroSection', 'AmountSelection', 'PersonalInfo']);
-    this.$store._.show(['PaymentInfo']);
+    if (this.validateAll(this.$refs.form)) {
+      this.$store._.hide(['IntroSection', 'AmountSelection', 'PersonalInfo']);
+      this.$store._.show(['PaymentInfo']);
+    }
   },
 
   previous() {
