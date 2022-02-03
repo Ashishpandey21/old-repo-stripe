@@ -101,6 +101,10 @@ const Home = (stripePublishableKey) => ({
       this.$store._.customerCreated = true;
       await this.mountPaymentElement();
     }
+
+    if (this.$refs.createAccountBtn) {
+      this.$refs.createAccountBtn.disabled = false;
+    }
   },
 
   reset() {
