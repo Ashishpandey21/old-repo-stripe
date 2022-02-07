@@ -85,10 +85,8 @@ export async function createPaymentIntent(form) {
   switch (form.paymentType) {
     case 'oneTime':
       return await oneTimePaymentIntent(form);
-      break;
     case 'recurring':
       return await recurringPaymentIntent(form);
-      break;
   }
 }
 

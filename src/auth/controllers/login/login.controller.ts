@@ -34,7 +34,7 @@ export class LoginController {
   @Post('oauth/login')
   public async login(@Req() request: Request, @Res() response: Response) {
     const redirectUrl = this.getRedirectUrl(request);
-    response.redirect(await redirectUrl);
+    return response.redirect(await redirectUrl);
   }
 
   /**
@@ -55,8 +55,9 @@ export class LoginController {
 
   @Get('login')
   @Render('login')
-  getLogin() {
+  getLogin(@Req() request: Request) {
     return {
+      error: request.flash('error'),
       loginUrl: this.urlGenerator.generateUrlFromController({
         controller: LoginController,
         controllerMethod: LoginController.prototype.login,

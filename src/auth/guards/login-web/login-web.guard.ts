@@ -26,6 +26,9 @@ export class LoginWebGuard extends AuthGuard('local') {
         },
       ];
       if (err instanceof UnauthorizedException) {
+        context
+          .getRequest()
+          .flash('error', 'These credentials do not match our records.');
         throw new UnprocessableEntityException(errors);
       }
 
