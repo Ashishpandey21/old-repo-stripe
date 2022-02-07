@@ -1,4 +1,10 @@
-import { DynamicModule, Global, Logger, Module, Provider } from '@nestjs/common';
+import {
+  DynamicModule,
+  Global,
+  Logger,
+  Module,
+  Provider,
+} from '@nestjs/common';
 import { StripePaymentGatewayController } from './controllers/stripe-payment-gateway/stripe-payment-gateway.controller';
 import { Stripe } from 'stripe';
 import { StripeRepoService } from './services/stripe-repo/stripe-repo.service';
@@ -18,7 +24,7 @@ import { UserRepoService } from '../user/services/user-repo/user-repo.service';
     UserCreatedMailRepoService,
     UserRepoService,
     UniqueEmailValidator,
-    Logger
+    Logger,
   ],
 })
 export class PaymentGatewayModule {

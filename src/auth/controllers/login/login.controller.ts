@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Render, Req, Res, UseGuards, } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Render,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserModel } from '../../../databases/models/user.model';
 import { LoginWebGuard } from '../../guards/login-web/login-web.guard';
@@ -20,8 +28,7 @@ export class LoginController {
     private intendManager: IntendManagerService,
     private stripeRepoService: StripeRepoService,
     private urlGenerator: UrlGeneratorService,
-  ) {
-  }
+  ) {}
 
   @UseGuards(LoginWebGuard)
   @Post('oauth/login')

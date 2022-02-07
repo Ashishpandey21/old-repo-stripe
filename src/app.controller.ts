@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Render } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppService } from './app.service';
 import { StripeConfig } from './environment/interfaces/environment-types.interface';

@@ -15,7 +15,7 @@ import { MailService } from '../mail/services/mail/mail.service';
     CheckEmailExistValidator,
     UserCreatedMailRepoService,
     MailService,
-    Logger
+    Logger,
   ],
   controllers: [RegisterController, UsersController],
 })
