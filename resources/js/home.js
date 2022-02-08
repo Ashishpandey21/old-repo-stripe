@@ -52,6 +52,12 @@ const Home = (stripePublishableKey) => ({
       }
     });
 
+    this.$watch('form.includeFees', () => {
+      if (this.form.paymentType === 'oneTime') {
+        queueCreatePaymentIntentRequest();
+      }
+    });
+
     queueCreatePaymentIntentRequest();
   },
 
