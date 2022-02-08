@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { checkEmailExist } from '../../../user/validators/check-email-exist/check-email-exist.validator';
 
 export class CreatePaymentIntentDto {

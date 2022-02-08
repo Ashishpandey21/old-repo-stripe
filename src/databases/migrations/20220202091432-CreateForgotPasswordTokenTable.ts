@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
       },
       user_id: {
-        type: DataType.BIGINT,
+        type: DataType.BIGINT.UNSIGNED,
         allowNull: false,
       },
       expires_at: {
