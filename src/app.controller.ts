@@ -27,6 +27,12 @@ export class AppController {
     return {};
   }
 
+  @Get('forgot-password/reset')
+  @Render('update-password')
+  resetPassword() {
+    return {};
+  }
+
   @Get('faqs')
   @Render('faqs')
   getFaqs() {

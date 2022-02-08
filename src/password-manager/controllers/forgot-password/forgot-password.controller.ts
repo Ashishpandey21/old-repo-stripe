@@ -77,7 +77,7 @@ export class ForgotPasswordController {
     @Query('token', MapTokenPipe) token: ForgotPasswordTokenModel | null,
     @Res() res: Response,
   ) {
-    const redirectUrl = this.configService.get<string>('FRONT_END_APP_URL');
+    const redirectUrl = this.configService.get('system').url;
 
     if (!token) {
       return res.redirect(`${redirectUrl}/404`);
