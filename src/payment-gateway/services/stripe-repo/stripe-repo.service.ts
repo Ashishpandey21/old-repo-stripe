@@ -33,7 +33,8 @@ export class StripeRepoService {
    * It Will create new intent
    */
   public async pay(paymentIntent: CreatePaymentIntentDto): Promise<any> {
-    return await this.oneTimePayment(paymentIntent);
+    const pay = await this.oneTimePayment(paymentIntent);
+    return pay;
   }
 
   public async recurringPayment(data: CreateUserDto): Promise<any> {
@@ -47,6 +48,7 @@ export class StripeRepoService {
           state: data.address.state,
         },
         email: data.email,
+        receipt_email: data.email,
         name: data.name,
       } as CreateStripeCustomerDto);
 
@@ -119,6 +121,9 @@ export class StripeRepoService {
         receipt_email: intent.email,
       },
     );
+
+    // const sendInvoice = this.createStripeInvoice(confirm);
+    // console.log('======>',sendInvoice)
     return confirm.next_action.use_stripe_sdk['stripe_js'];
   }
 
@@ -234,7 +239,13 @@ export class StripeRepoService {
       return_url: 'http://localhost:3000/',
     });
   }
+
+  /**
+   * It will display all payment intent
+   * @param params
+   */
   public async transactionsList(params): Promise<any> {
     return this.stripe.paymentIntents.list({});
   }
+
 }
