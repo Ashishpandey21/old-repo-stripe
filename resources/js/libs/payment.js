@@ -96,8 +96,10 @@ async function recurringPaymentIntent(form) {
 
 async function oneTimePaymentIntent(form) {
   const amount = form.includeFees
-    ? calculateStripeFee(form.amount, form.currency)
+    ? calculateStripeFee(form.amount, form.currency).total
     : form.amount;
+
+  console.log(amount);
 
   const { ok, status, data } = await postRequest('/pay', {
     currency: form.currency,
