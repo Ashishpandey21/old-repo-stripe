@@ -57,3 +57,9 @@ export interface StripeConfig {
   secretKey: string;
   publishableKey: string;
 }
+
+export interface StripeDescription {
+  description: string;
+  privacy_url: string;
+  terms_url: string;
+}

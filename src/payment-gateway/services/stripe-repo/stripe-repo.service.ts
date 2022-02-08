@@ -70,7 +70,7 @@ export class StripeRepoService {
         amount: this.getLowestDenomination(paymentIntent),
         currency: paymentIntent.currency,
         payment_method_types: [CARD],
-        description: 'Donation to SIL Language Technology',
+        description: this.configService.get('SUBJECT'),
       });
       return intent;
     } catch (e) {
@@ -122,8 +122,6 @@ export class StripeRepoService {
       },
     );
 
-    // const sendInvoice = this.createStripeInvoice(confirm);
-    // console.log('======>',sendInvoice)
     return confirm.next_action.use_stripe_sdk['stripe_js'];
   }
 
@@ -222,10 +220,8 @@ export class StripeRepoService {
     const configuration = await this.stripe.billingPortal.configurations.create(
       {
         business_profile: {
-          privacy_policy_url:
-            'https://staging.donation.languagetechnology.org/forgot-password',
-          terms_of_service_url:
-            'https://staging.donation.languagetechnology.org/forgot-password',
+          privacy_policy_url: this.configService.get('PRIVACY_POLICY_URL'),
+          terms_of_service_url: this.configService.get('TERMS_OF_SERVICE_URL'),
         },
         features: {
           invoice_history: {
@@ -236,7 +232,7 @@ export class StripeRepoService {
     );
     return await this.stripe.billingPortal.sessions.create({
       customer: data.stripe_user_id,
-      return_url: 'http://localhost:3000/',
+      return_url: this.configService.get('APP_URL'),
     });
   }
 
@@ -247,5 +243,4 @@ export class StripeRepoService {
   public async transactionsList(params): Promise<any> {
     return this.stripe.paymentIntents.list({});
   }
-
 }

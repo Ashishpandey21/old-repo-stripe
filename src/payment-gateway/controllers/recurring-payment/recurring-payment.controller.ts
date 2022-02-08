@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { UserRepoService } from '../../../user/services/user-repo/user-repo.service';
 import { CreateUserDto } from '../../../user/dtos/create-user/create-user.dto';
 import { ApiHeader, ApiProperty, ApiTags } from '@nestjs/swagger';
