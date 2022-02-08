@@ -21,7 +21,9 @@
     </template>
 
     <template x-if="showPaymentForm">
-      <div class="row stripe-form" :class="fetchingPaymentIntent && 'loading'">
+      <div
+        class="row stripe-form"
+        :class="fetchingPaymentIntent && 'loading'">
         <div class="spinner-wrapper f-center">
           <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
@@ -32,22 +34,39 @@
             Credit Card Number
             <sup>*</sup>
           </label>
-          <div id="cardNumber-element" class="form-control"></div>
+          <div
+            id="cardNumber-element"
+            :class="hasErrors('card') && 'is-invalid'"
+            class="form-control">
+          </div>
         </div>
         <div class="form-group col-md-3 mb-4">
           <label for="cardCvc-element">
             Security Code
             <sup>*</sup>
           </label>
-          <div id="cardCvc-element" class="form-control"></div>
+          <div
+            id="cardCvc-element"
+            :class="hasErrors('card') && 'is-invalid'"
+            class="form-control">
+          </div>
         </div>
         <div class="form-group col-md-3 mb-4">
           <label for="cardExpiry-element">
             Expiration Date
             <sup>*</sup>
           </label>
-          <div id="cardExpiry-element" class="form-control"></div>
+          <div
+            id="cardExpiry-element"
+            :class="hasErrors('card') && 'is-invalid'"
+            class="form-control">
+          </div>
         </div>
+        <small
+          class="text-danger"
+          x-show="hasErrors('card')"
+          x-text="firstError('card')">
+        </small>
         <div class="col">
           <button
             type="submit"

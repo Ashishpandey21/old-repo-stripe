@@ -43,42 +43,62 @@ export class PaymentElement {
 }
 
 async function recurringPaymentIntent(form) {
-  try {
-    const response = await postRequest('/user/subscription', {
-      address: {
-        line1: form.address1,
-        line2: form.address2,
-        city: form.city,
-        country: form.country,
-        postal_code: form.zipPostalCode,
-        state: form.stat,
-      },
-      email: form.email,
-      name: `${form.salutation} ${form.firstName} ${form.lastName}`,
-      first_name: form.firstName,
-      last_name: form.lastName,
-      phone: form.phoneNumber,
-      currency: form.currency,
-      amountId: form.amountId,
-    });
-    console.info('recurringPaymentIntent -- payment intent created');
-    return response.payment.latest_invoice.payment_intent;
-  } catch (e) {
-    console.error('recurringPaymentIntent --', e.message);
+  const { ok, status, data } = await postRequest('/user/subscription', {
+    address: {
+      line1: form.address1,
+      line2: form.address2,
+      city: form.city,
+      country: form.country,
+      postal_code: form.zipPostalCode,
+      state: form.stat,
+    },
+    email: form.email,
+    name: `${form.salutation} ${form.firstName} ${form.lastName}`,
+    first_name: form.firstName,
+    last_name: form.lastName,
+    phone: form.phoneNumber,
+    currency: form.currency,
+    amountId: form.amountId,
+  });
+
+  if (!ok) {
+    return {
+      ok,
+      status,
+      errors: data.errors,
+    };
   }
+
+  console.info('recurringPaymentIntent -- payment intent created');
+
+  return {
+    ok,
+    status,
+    intent: data.payment.latest_invoice.payment_intent,
+  };
 }
 
 async function oneTimePaymentIntent(form) {
-  try {
-    const intent = await postRequest('/pay', {
-      currency: form.currency,
-      amount: parseFloat(form.amount),
-    });
-    console.info('oneTimePaymentIntent -- payment intent created');
-    return intent;
-  } catch (e) {
-    console.error('oneTimePaymentIntent --', e.message);
+  const { ok, status, data } = await postRequest('/pay', {
+    currency: form.currency,
+    amount: parseFloat(form.amount),
+  });
+
+  if (!ok) {
+    return {
+      ok,
+      status,
+      errors: data.errors,
+    };
   }
+
+  console.info('oneTimePaymentIntent -- payment intent created');
+
+  return {
+    ok,
+    status,
+    intent: data,
+  };
 }
 
 export async function createPaymentIntent(form) {
