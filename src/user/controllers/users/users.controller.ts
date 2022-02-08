@@ -44,6 +44,13 @@ export class UsersController {
 
   @UseGuards(AccessTokenGuard)
   @ApiProperty()
+  @Get('/invoices/:id')
+  public getCustomerInvoices(@Param() params): Promise<any> {
+    return this.stripeRepoService.customersInvoices(params.id);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiProperty()
   @Get('/transactions')
   public getTransactionsList(@Query() query): Promise<any> {
     return this.stripeRepoService.transactionsList(query);
