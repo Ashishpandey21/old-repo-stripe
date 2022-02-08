@@ -1,3 +1,4 @@
+import { STRIPE_FEES } from '../constants.js';
 import { postRequest } from './request.js';
 
 export class PaymentElement {
@@ -42,6 +43,21 @@ export class PaymentElement {
   }
 }
 
+// https://gist.github.com/qutek/c3954950798ae14d6caabd6ba15b302b
+export function calculateStripeFee(amount, currency) {
+  const _fee = STRIPE_FEES[currency];
+  amount = parseFloat(amount);
+  const total =
+    (amount + parseFloat(_fee.fixed)) / (1 - parseFloat(_fee.percent) / 100);
+  const fee = total - amount;
+
+  return {
+    amount,
+    fee: fee.toFixed(2),
+    total: total.toFixed(2),
+  };
+}
+
 async function recurringPaymentIntent(form) {
   const { ok, status, data } = await postRequest('/user/subscription', {
     address: {
@@ -79,9 +95,13 @@ async function recurringPaymentIntent(form) {
 }
 
 async function oneTimePaymentIntent(form) {
+  const amount = form.includeFees
+    ? calculateStripeFee(form.amount, form.currency)
+    : form.amount;
+
   const { ok, status, data } = await postRequest('/pay', {
     currency: form.currency,
-    amount: parseFloat(form.amount),
+    amount: parseFloat(amount),
   });
 
   if (!ok) {

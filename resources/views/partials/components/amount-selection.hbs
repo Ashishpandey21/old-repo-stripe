@@ -71,39 +71,37 @@
 
           <template x-if="form.paymentType === 'oneTime'">
             <div class="input-icon-wrap col-12 col-md-4 mb-3">
-              <div class="d-flex" :class="hasErrors('amount') && 'is-invalid'">
+              <div class="d-flex">
                 <div class="input-group-prepend">
                   <span class="input-group-text h-100 px-3" x-text="currencySymbol"></span>
                 </div>
                 <input type="number" class="form-control" x-model="form.amount"
-                  :class="hasErrors('amount') && 'is-invalid'" data-rules='["required", "greaterThan:0"]'
                   placeholder="Other amount" aria-label="Other amount" aria-describedby="basic-addon1">
               </div>
-              <div class="invalid-feedback" x-text="firstError('amount')"></div>
             </div>
+          </template>
         </div>
-</template>
+      </div>
+    </div>
 
-</div>
-</div>
+    <template x-if="form.paymentType === 'oneTime'">
+      <div class="form-group col-12 mb-3">
+        <div class="form-check checkbox-lg">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" x-model="form.includeFees">
+          <label class="form-check-label" for="exampleCheck1">
+            Please add <span x-text="`${currencySymbol}${processingFees}`"></span>
+            to my donation to cover the processing fee.
+          </label>
+        </div>
+      </div>
+    </template>
 
-<!-- FIXME: calculate processing fees -->
-<div class="form-group col-12 mb-3">
-  <div class="form-check checkbox-lg">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">
-      Please add <span x-text="`${currencySymbol}0.00`"></span> to my donation to cover the
-      processing fee.
-    </label>
-  </div>
-</div>
-
-<div class="form-group col-12 mb-3">
-  <textarea class="form-control resizer-none" placeholder="Comments" x-model="form.comment" rows="3"></textarea>
-</div>
-</div>
-<button type="button" @click="next" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
-  Next
-</button>
-</fieldset>
+    <div class="form-group col-12 mb-3">
+      <textarea class="form-control resizer-none" placeholder="Comments" x-model="form.comment" rows="3"></textarea>
+    </div>
+    </div>
+    <button type="button" @click="next" class="btn btn-primary mt-4 min-width-300 d-block d-md-none">
+      Next
+    </button>
+  </fieldset>
 </template>

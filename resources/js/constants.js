@@ -7,15 +7,15 @@ export const PAYMENT_TYPES = {
 
 export const CURRENCIES = {
   usd: '$',
-  // aud: '$',
   // eur: '€',
   // gbp: '£',
+  // cad: '$',
+  // aud: '$',
   // krw: '₩',
   // nzd: '$',
   // thb: '฿',
   // jpy: '¥',
   // brl: '$',
-  // cad: '$',
 };
 
 export const RECURRING_PAYMENT_AMOUNTS = {
@@ -54,6 +54,7 @@ export const AMOUNT_SELECTION_FORM_DEFAULT = {
   amount: ONE_TIME_PAYMENT_AMOUNTS['usd'][0],
   amountId: 'price_1KOrs0SECaNOBWfucXPpmhLK',
   comment: '',
+  includeFees: false,
 };
 
 export const PERSONAL_INFO_FORM_DEFAULT = {
@@ -77,3 +78,17 @@ export const FORM_DEFAULT = {
 };
 
 export const COUNTRIES = countries;
+
+export const STRIPE_FEES = {
+  usd: { percent: 2.9, fixed: 0.3 },
+  eur: { percent: 2.4, fixed: 0.24 },
+  gbp: { percent: 2.4, fixed: 0.2 },
+  cad: { percent: 2.9, fixed: 0.3 },
+  aud: { percent: 2.9, fixed: 0.3 },
+  // FIXME: find and change commented values
+  // krw: { percent: 2.9, fixed: 0.3 },
+  // nzd: { percent: 2.9, fixed: 0.3 },
+  // thb: { percent: 2.9, fixed: 0.3 },
+  jpy: { percent: 3.6, fixed: 0 },
+  // brl: { percent: 2.9, fixed: 0.3 },
+};
