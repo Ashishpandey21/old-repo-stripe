@@ -56,10 +56,24 @@ const Home = (stripePublishableKey) => ({
   },
 
   async mountPaymentElement() {
+    let mounted = false;
+
     this.fetchingPaymentIntent = true;
-    const response = await createPaymentIntent(this.form);
-    this.stripeElement.updateSecretKey(response.client_secret);
+    const { errors, intent } = await createPaymentIntent(this.form);
+
+    if (!errors) {
+      this.stripeElement.updateSecretKey(intent.client_secret);
+      mounted = true;
+    } else {
+      // populate the errors
+      Object.keys(errors).forEach((key) => {
+        if (key in this.form) this.setError(key, errors[key][0]);
+      });
+    }
+
     this.fetchingPaymentIntent = false;
+
+    return mounted;
   },
 
   async submit(ev) {
@@ -71,6 +85,8 @@ const Home = (stripePublishableKey) => ({
   },
 
   async capturePayment() {
+    this.setError('card', null);
+
     const { stripe, secretKey } = this.stripeElement;
     const { paymentIntent, error } = await stripe.confirmCardPayment(
       secretKey,
@@ -84,8 +100,9 @@ const Home = (stripePublishableKey) => ({
     }
 
     if (error) {
-      // FIXME: handle error states
       console.error(`data --`, error);
+      this.setError('card', error.message);
+      this.$refs.submitButton.disabled = false;
     }
 
     console.info('Home -- capturing the payment');
@@ -95,19 +112,23 @@ const Home = (stripePublishableKey) => ({
     this.$refs.createAccountBtn.disabled = true;
     this.$store._.disable(['AmountSelection', 'PersonalInfo']);
 
-    if (this.validateAll(this.$refs.form)) {
-      this.$store._.hide(['IntroSection', 'AmountSelection', 'PersonalInfo']);
-      this.$store._.show(['PaymentInfo']);
-      this.$store._.customerCreated = true;
-      await this.mountPaymentElement();
-    } else {
-      this.$refs.createAccountBtn.disabled = false;
+    const cleanup = () => {
+      if (this.$refs.createAccountBtn) {
+        this.$refs.createAccountBtn.disabled = false;
+      }
       this.$store._.enable(['AmountSelection', 'PersonalInfo', 'PaymentInfo']);
-    }
+      this.$store._.customerCreated = false;
+    };
 
-    if (this.$refs.createAccountBtn) {
-      this.$refs.createAccountBtn.disabled = false;
-    }
+    // frontend validation
+    if (!this.validateAll(this.$refs.form)) cleanup();
+
+    this.$store._.hide(['IntroSection', 'AmountSelection', 'PersonalInfo']);
+    this.$store._.show(['PaymentInfo']);
+    this.$store._.customerCreated = true;
+
+    // backend validation
+    if (!(await this.mountPaymentElement())) cleanup();
   },
 
   reset() {

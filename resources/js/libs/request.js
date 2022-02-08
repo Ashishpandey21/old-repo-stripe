@@ -13,5 +13,9 @@ export const postRequest = async (endpoint, data) => {
     body: JSON.stringify(data),
   });
 
-  return await resp.json();
+  return {
+    ok: resp.ok,
+    status: resp.status,
+    data: await resp.json(),
+  };
 };

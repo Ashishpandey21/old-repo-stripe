@@ -27,7 +27,7 @@ export const makeForm = (form = {}, errors = {}) => ({
   },
   validate(el) {
     const name = el.getAttribute('name');
-    this.errors[name] = getErrorMessage(el);
+    this.setError(name, getErrorMessage(el));
     return this.errors[name] === null;
   },
   validateAll(el) {
@@ -41,5 +41,8 @@ export const makeForm = (form = {}, errors = {}) => ({
     });
 
     return status;
+  },
+  setError(key, message) {
+    this.errors[key] = message;
   },
 });

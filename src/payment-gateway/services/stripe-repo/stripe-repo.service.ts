@@ -243,4 +243,13 @@ export class StripeRepoService {
   public async transactionsList(params): Promise<any> {
     return this.stripe.paymentIntents.list({});
   }
+
+  /**
+   * Stripe customers Invoices
+   */
+  public async customersInvoices(customerId: string): Promise<any> {
+    return this.stripe.invoices.list({
+      customer: customerId,
+    });
+  }
 }
