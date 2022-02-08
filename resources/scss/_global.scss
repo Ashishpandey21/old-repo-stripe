@@ -184,6 +184,11 @@ form {
       color: $red;
     }
   }
+  .form-control.is-invalid, .was-validated .form-control:invalid{
+    &:focus{
+      background-image: none;
+    }
+  }
 }
 
 .stripe-form {
