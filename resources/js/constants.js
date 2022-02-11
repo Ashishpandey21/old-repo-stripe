@@ -7,36 +7,103 @@ export const PAYMENT_TYPES = {
 
 export const CURRENCIES = {
   usd: '$',
-  // eur: '€',
-  // gbp: '£',
-  // cad: '$',
-  // aud: '$',
-  // krw: '₩',
-  // nzd: '$',
-  // thb: '฿',
-  // jpy: '¥',
-  // brl: '$',
+  eur: '€',
+  gbp: '£',
+  cad: '$',
+  aud: '$',
+  krw: '₩',
+  nzd: '$',
+  thb: '฿',
+  jpy: '¥',
+  brl: '$',
 };
 
+// FIXME: get dynamic values from the server instead of hardcoding
 export const RECURRING_PAYMENT_AMOUNTS = {
-  price_1KOrs0SECaNOBWfucXPpmhLK: '25',
-  price_1KOrs0SECaNOBWfuLL3onTKn: '50',
-  price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
-  price_1KOrs0SECaNOBWfuvPrNrg75: '200',
-  price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  usd: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  // FIXME: change price ids
+  eur: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  gbp: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  cad: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  aud: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  krw: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  nzd: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  thb: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  jpy: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
+  brl: {
+    price_1KOrs0SECaNOBWfucXPpmhLK: '25',
+    price_1KOrs0SECaNOBWfuLL3onTKn: '50',
+    price_1KOrs0SECaNOBWfu5M6JdqDX: '100',
+    price_1KOrs0SECaNOBWfuvPrNrg75: '200',
+    price_1KOrs0SECaNOBWfu4CoVWjQF: '500',
+  },
 };
 
 export const ONE_TIME_PAYMENT_AMOUNTS = {
   usd: ['25', '50', '100', '200'],
-  // aud: ['30', '60', '100', '200'],
-  // eur: ['15', '40', '80', '150'],
-  // gbp: ['15', '30', '60', '100'],
-  // krw: ['20', '50', '100', '200'],
-  // nzd: ['50', '100', '200', '500'],
-  // thb: ['500', '1000', '2000', '5000'],
-  // jpy: ['2000', '5000', '10000', '20000'],
-  // brl: ['80', '200', '400', '800'],
-  // cad: ['20', '70', '100', '200'],
+  aud: ['30', '60', '100', '200'],
+  eur: ['15', '40', '80', '150'],
+  gbp: ['15', '30', '60', '100'],
+  krw: ['20', '50', '100', '200'],
+  nzd: ['50', '100', '200', '500'],
+  thb: ['500', '1000', '2000', '5000'],
+  jpy: ['2000', '5000', '10000', '20000'],
+  brl: ['80', '200', '400', '800'],
+  cad: ['20', '70', '100', '200'],
 };
 
 export const SALUTATIONS = {
@@ -85,10 +152,10 @@ export const STRIPE_FEES = {
   gbp: { percent: 2.4, fixed: 0.2 },
   cad: { percent: 2.9, fixed: 0.3 },
   aud: { percent: 2.9, fixed: 0.3 },
-  // FIXME: find and change commented values
-  // krw: { percent: 2.9, fixed: 0.3 },
-  // nzd: { percent: 2.9, fixed: 0.3 },
-  // thb: { percent: 2.9, fixed: 0.3 },
   jpy: { percent: 3.6, fixed: 0 },
-  // brl: { percent: 2.9, fixed: 0.3 },
+  // FIXME: can not find information for the following currencies
+  krw: { percent: 2.9, fixed: 0.3 },
+  nzd: { percent: 2.9, fixed: 0.3 },
+  thb: { percent: 2.9, fixed: 0.3 },
+  brl: { percent: 2.9, fixed: 0.3 },
 };

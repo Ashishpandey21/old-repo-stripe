@@ -1,5 +1,6 @@
 import {
   CURRENCIES,
+  PAYMENT_TYPES,
   ONE_TIME_PAYMENT_AMOUNTS,
   RECURRING_PAYMENT_AMOUNTS,
 } from '../constants.js';
@@ -9,8 +10,23 @@ export default () => ({
   name: 'AmountSelection',
 
   CURRENCIES,
-  ONE_TIME_PAYMENT_AMOUNTS,
-  RECURRING_PAYMENT_AMOUNTS,
+
+  get paymentAmounts() {
+    let amounts = [];
+
+    switch (this.form.paymentType) {
+      case PAYMENT_TYPES.oneTime:
+        amounts = ONE_TIME_PAYMENT_AMOUNTS[this.form.currency];
+        break;
+      case PAYMENT_TYPES.recurring:
+        amounts = RECURRING_PAYMENT_AMOUNTS[this.form.currency];
+        break;
+    }
+
+    this.form.amount = amounts[0];
+
+    return amounts;
+  },
 
   get currencySymbol() {
     return CURRENCIES[this.form.currency];

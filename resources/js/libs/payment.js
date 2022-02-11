@@ -99,8 +99,6 @@ async function oneTimePaymentIntent(form) {
     ? calculateStripeFee(form.amount, form.currency).total
     : form.amount;
 
-  console.log(amount);
-
   const { ok, status, data } = await postRequest('/pay', {
     currency: form.currency,
     amount: parseFloat(amount),

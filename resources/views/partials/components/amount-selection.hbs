@@ -42,7 +42,7 @@
         <div class="radio-group row">
 
           <template x-if="form.paymentType === 'recurring'">
-            <template x-for="(amount, id) in RECURRING_PAYMENT_AMOUNTS">
+            <template x-for="(amount, id) in paymentAmounts">
               <div class="col-6 col-md-2 mb-3">
                 <div class="form-check mb-0 h-100">
                   <input class="form-check-input" type="radio" name="amountId" :id="id" :value="id"
@@ -56,12 +56,11 @@
           </template>
 
           <template x-if="form.paymentType === 'oneTime'">
-            <template x-for="amount in ONE_TIME_PAYMENT_AMOUNTS[form.currency]">
+            <template x-for="(amount, i) in paymentAmounts">
               <div class="col-6 col-md-2 mb-3">
                 <div class="form-check mb-0 h-100">
-                  <input class="form-check-input" type="radio" name="amount" :id="`amount-${form.currency}-${amount}`"
-                    :value="amount" x-model="form.amount">
-                  <label class="form-check-label mb-0 f-center" :for="`amount-${form.currency}-${amount}`">
+                  <input class="form-check-input" type="radio" name="amount" :id="`amount-${i}`" @click="form.amount = amount">
+                  <label class="form-check-label mb-0 f-center" :for="`amount-${i}`">
                     <span x-text="`${currencySymbol}${amount}`"></span><i class="far fa-check-circle"></i>
                   </label>
                 </div>
