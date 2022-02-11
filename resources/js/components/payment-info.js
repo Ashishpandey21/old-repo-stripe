@@ -8,9 +8,13 @@ export default () => ({
 
   get showPaymentForm() {
     if (this.form.paymentType === 'oneTime') {
-      return true;
+      return this.form.amount !== '';
     }
 
-    return this.$store._.customerCreated;
+    if (this.form.paymentType === 'recurring') {
+      return this.$store._.customerCreated;
+    }
+
+    return false;
   },
 });

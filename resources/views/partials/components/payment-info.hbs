@@ -13,10 +13,17 @@
       Payment Info
     </h2>
 
-    <template x-if="!showPaymentForm">
+    <template x-if="!showPaymentForm && form.paymentType === 'recurring'">
       <div class="alert alert-info" role="alert">
         For recurring donations,
         Payment Information will be requested after your account is created.
+      </div>
+    </template>
+
+    <template x-if="!showPaymentForm && form.paymentType === 'oneTime'">
+      <div class="alert alert-info" role="alert">
+        For one time donations,
+        Payment Information will be requested after your select or input a valid amount.
       </div>
     </template>
 

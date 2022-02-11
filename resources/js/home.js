@@ -57,8 +57,6 @@ const Home = (stripePublishableKey) => ({
         queueCreatePaymentIntentRequest();
       }
     });
-
-    queueCreatePaymentIntentRequest();
   },
 
   async mountPaymentElement() {

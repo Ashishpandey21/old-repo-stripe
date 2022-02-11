@@ -6,6 +6,15 @@
       <div class="form-group col-12 mb-3">
         <h2 class="float-start">Donate Now</h2>
         <div class="custom-select-wrap text-end">
+          <template x-if="form.paymentType === 'recurring'">
+            <select class="custom-select min-width-100px" x-model="form.recurringFrequency">
+              <template x-for="key in Object.keys(RECURRING_FREQUENCY)" :key="key">
+                <option :value="key" x-text="`${RECURRING_FREQUENCY[key]}`">
+                </option>
+              </template>
+            </select>
+          </template>
+
           <select class="custom-select min-width-100px" x-model="form.currency">
             <template x-for="key in Object.keys(CURRENCIES)" :key="key">
               <option :value="key" x-text="`${key.toUpperCase()} ${CURRENCIES[key]}`">
@@ -31,7 +40,7 @@
               <input class="form-check-input" type="radio" name="paymentType" id="recurring" value="recurring"
                 x-model="form.paymentType">
               <label class="form-check-label" for="recurring">
-                Monthly Recurring
+                Recurring
               </label>
             </div>
           </div>
@@ -39,15 +48,23 @@
       </div>
 
       <div class="form-group col-12">
-        <div class="radio-group row">
+        <div
+          :class="(hasErrors('amount') || hasErrors('amountId')) && 'is-invalid'"
+          class="radio-group row is-invalid">
 
           <template x-if="form.paymentType === 'recurring'">
-            <template x-for="(amount, id) in paymentAmounts">
+            <template x-for="(amount, id) in paymentAmounts['recurring']">
               <div class="col-6 col-md-2 mb-3">
                 <div class="form-check mb-0 h-100">
-                  <input class="form-check-input" type="radio" name="amountId" :id="id" :value="id"
-                    x-model="form.amountId">
-                  <label class="form-check-label mb-0 f-center" :for="id">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="amountId"
+                    :id="`recurring-${id}`"
+                    :value="id"
+                    :checked="form.amountId === id"
+                    @click="form.amountId = id">
+                  <label class="form-check-label mb-0 f-center" :for="`recurring-${id}`">
                     <span x-text="`${currencySymbol}${amount}`"></span><i class="far fa-check-circle"></i>
                   </label>
                 </div>
@@ -56,11 +73,17 @@
           </template>
 
           <template x-if="form.paymentType === 'oneTime'">
-            <template x-for="(amount, i) in paymentAmounts">
+            <template x-for="(amount, i) in paymentAmounts['oneTime']">
               <div class="col-6 col-md-2 mb-3">
                 <div class="form-check mb-0 h-100">
-                  <input class="form-check-input" type="radio" name="amount" :id="`amount-${i}`" @click="form.amount = amount">
-                  <label class="form-check-label mb-0 f-center" :for="`amount-${i}`">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="amount"
+                    :id="`oneTime-${i}`"
+                    :checked="form.amount === amount"
+                    @click="form.amount = amount">
+                  <label class="form-check-label mb-0 f-center" :for="`oneTime-${i}`">
                     <span x-text="`${currencySymbol}${amount}`"></span><i class="far fa-check-circle"></i>
                   </label>
                 </div>
@@ -74,12 +97,20 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text h-100 px-3" x-text="currencySymbol"></span>
                 </div>
-                <input type="number" class="form-control" x-model="form.amount"
-                  placeholder="Other amount" aria-label="Other amount" aria-describedby="basic-addon1">
+                <input
+                  type="number"
+                  class="form-control"
+                  @change="clearCheckedRadio"
+                  x-model="form.amount"
+                  placeholder="Other amount"
+                  aria-label="Other amount"
+                  aria-describedby="basic-addon1">
               </div>
             </div>
           </template>
         </div>
+        <!-- <div class="invalid-feedback" x-text="firstError('amount') || firstError('amountId')"> -->
+        <!-- </div> -->
       </div>
     </div>
 

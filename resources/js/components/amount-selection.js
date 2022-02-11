@@ -1,6 +1,6 @@
 import {
   CURRENCIES,
-  PAYMENT_TYPES,
+  RECURRING_FREQUENCY,
   ONE_TIME_PAYMENT_AMOUNTS,
   RECURRING_PAYMENT_AMOUNTS,
 } from '../constants.js';
@@ -10,20 +10,19 @@ export default () => ({
   name: 'AmountSelection',
 
   CURRENCIES,
+  RECURRING_FREQUENCY,
 
   get paymentAmounts() {
-    let amounts = [];
+    const { currency, recurringFrequency } = this.form;
 
-    switch (this.form.paymentType) {
-      case PAYMENT_TYPES.oneTime:
-        amounts = ONE_TIME_PAYMENT_AMOUNTS[this.form.currency];
-        break;
-      case PAYMENT_TYPES.recurring:
-        amounts = RECURRING_PAYMENT_AMOUNTS[this.form.currency];
-        break;
-    }
+    const amounts = {
+      oneTime: ONE_TIME_PAYMENT_AMOUNTS[currency],
+      recurring: RECURRING_PAYMENT_AMOUNTS[currency][recurringFrequency],
+    };
 
-    this.form.amount = amounts[0];
+    // reset the amount values
+    this.form.amount = '';
+    this.form.amountId = '';
 
     return amounts;
   },
@@ -33,11 +32,19 @@ export default () => ({
   },
 
   get processingFees() {
-    return calculateStripeFee(this.form.amount, this.form.currency).fee;
+    const fee = calculateStripeFee(this.form.amount, this.form.currency).fee;
+    return fee === 'NaN' ? 0.0 : fee;
   },
 
   next() {
     this.$store._.hide(['IntroSection', 'AmountSelection', 'PaymentInfo']);
     this.$store._.show(['PersonalInfo']);
+  },
+
+  clearCheckedRadio() {
+    const el = document.querySelector('input[type=radio][name=amount]:checked');
+    if (el) {
+      el.checked = false;
+    }
   },
 });
